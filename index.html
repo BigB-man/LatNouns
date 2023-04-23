@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Bman's Latin Noun Tester</title>
+	<link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Welcome to the Latin noun declension tester!</h1>
+    <input type="text" id="typeMe" value="">
+    <button onclick ="addTo();" id="">Add value</button>
+    <button onclick ="callTo();" id="">Call value</button>
+    <p>👋</p>
+  </body>
+</html>
