@@ -1,1 +1,5 @@
 to run app type $ npm run start
+
+to install electron storage $ npm install --save electron-storage
+https://github.com/Cocycles/electron-storage
+
