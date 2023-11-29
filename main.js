@@ -1,6 +1,6 @@
 var text = "";
 
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, nativeImage  } = require('electron');
 const storage = require('electron-json-storage');
 
 
@@ -11,8 +11,8 @@ const path = require('path')
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1080,
+    height: 720,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -38,11 +38,16 @@ const createWindow = () => {
     }
 
   ])
-
+  // ipcMain.on("btnclick", function (event, arg) {
+  //   // Create a new window
+  //   settingsTab
+  //   });
   Menu.setApplicationMenu(menu)
   win.loadFile('index.html')
+  win.webContents.openDevTools()
 }
 function settingsTab(){
+  console.log("hi")
   const settingsTab = new BrowserWindow({
     width: 800,
     height: 600,
@@ -57,6 +62,10 @@ app.whenReady().then(() => {
   ipcMain.on('counter-value', (_event, value) => {
     console.log(value) // will print value to Node console
   })
+  //ipcMain.on('btnclick', settingsTab)
+  ipcMain.on('btnclick', (event, arg) => {settingsTab});
+  
+  
   createWindow()
 
   app.on('activate', () => {
