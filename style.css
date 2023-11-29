@@ -5,3 +5,25 @@ body {
 	background-position: center;
 	background-size: cover;
 }
+#settings {
+	background-image: url("");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+	background-size: cover;
+}
+.centre{
+	text-align: center;
+}
+.title{
+	height: 10%;
+	width: 100%;
+}
+.fit{
+	height: 10%;
+	width: 10%;
+	float: right;
+}
+.inline{
+	display: inline;
+}
