@@ -9,11 +9,16 @@ window.addEventListener('DOMContentLoaded', () => {
   //document.getElementById('path').innerText = 'cheese'
   //const storage = require('electron-json-storage');
   //const dataPath = storage.getDataPath();
-  localStorage.setItem("myCat", "Tom");
-  const cat = localStorage.getItem("myCat");
-  document.getElementById('path').innerText = cat;
-  const defaultDataPath = storage.getDefaultDataPath()
-  document.getElementById('path').innerText = defaultDataPath;
+  //localStorage.setItem("myCat", "Tom");
+  //const cat = localStorage.getItem("myCat");
+  //document.getElementById('path').innerText = cat;
+  //const defaultDataPath = storage.getDefaultDataPath()
+  //document.getElementById('path').innerText = defaultDataPath;
   
   
+})
+const { contextBridge, ipcRenderer } = require('electron')
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  handleCounter: (callback) => ipcRenderer.on('update-counter', callback)
 })
