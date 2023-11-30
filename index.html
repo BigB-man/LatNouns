@@ -28,7 +28,7 @@
 	<span id="path"></span>
 
   <script nonce ="2726c7f26c">
-    const { ipcRenderer } = window.require('electron');
+    const { ipcRenderer } = require('electron');
     let data = "pizza";
     function cheddar() {
       ipcRenderer.send('btnclick', data);
