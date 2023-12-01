@@ -28,8 +28,7 @@ for i in source:#declension 1, i still need to implement to change for masculine
                                             "acc":{"sing":i["key"][:-1] + data["FORM"]["acc"]["sing"], "plur":i["key"][:-1] + data["FORM"]["acc"]["plur"]},
                                             "gen":{"sing":i["key"][:-1] + data["FORM"]["gen"]["sing"], "plur":i["key"][:-1] + data["FORM"]["gen"]["plur"]},
                                             "dat":{"sing":i["key"][:-1] + data["FORM"]["dat"]["sing"], "plur":i["key"][:-1] + data["FORM"]["dat"]["plur"]},
-                                            "abl":{"sing":i["key"][:-1] + data["FORM"]["abl"]["sing"], "plur":i["key"][:-1] + data["FORM"]["abl"]["plur"]},
-                                            "Definition":i["senses"]}})
+                                            "abl":{"sing":i["key"][:-1] + data["FORM"]["abl"]["sing"], "plur":i["key"][:-1] + data["FORM"]["abl"]["plur"]}}})
                 # data[i["key"]]["gen"]["sing"] = i["key"][:-1] + data["FORM"]["gen"]["sing"]
                 # data[i["key"]]["gen"]["plur"] = i["key"][:-1] + data["FORM"]["gen"]["plur"]
                 # data[i["key"]]["dat"]["sing"] = i["key"][:-1] + data["FORM"]["dat"]["sing"]
