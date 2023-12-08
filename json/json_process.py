@@ -9,7 +9,7 @@ os.chdir(script_directory)
 filename = 'NounDeclension1.json'
 print("Current working directory:", os.getcwd())
 letters =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Z']
-with open(filename, 'r') as k:
+with open(filename, 'r',encoding='utf-8') as k:
     data = json.load(k)
 index = 0
 for j in letters:
@@ -24,23 +24,23 @@ for j in letters:
                     if i["gender"] == "F":
                         data["Fem"].update({i["key"]:{
                             "nom":{
-                                "sing":i["key"][:-1] + data["Fem"]["FORM"]["nom"]["sing"], 
-                                "plur":i["key"][:-1] + data["Fem"]["FORM"]["nom"]["plur"]},
+                                "sing":i["title_orthography"][:-1] + data["Fem"]["FORM"]["nom"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["nom"]["plur"]},
                             "acc":{
-                                "sing":i["key"][:-1] + data["Fem"]["FORM"]["acc"]["sing"], 
-                                "plur":i["key"][:-1] + data["Fem"]["FORM"]["acc"]["plur"]},
+                                "sing":i["title_orthography"][:-1] + data["Fem"]["FORM"]["acc"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["acc"]["plur"]},
                             "gen":{
-                                "sing":i["key"][:-1] + data["Fem"]["FORM"]["gen"]["sing"], 
-                                "plur":i["key"][:-1] + data["Fem"]["FORM"]["gen"]["plur"]},
+                                "sing":i["title_orthography"][:-1] + data["Fem"]["FORM"]["gen"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["gen"]["plur"]},
                             "dat":{
-                                "sing":i["key"][:-1] + data["Fem"]["FORM"]["dat"]["sing"], 
-                                "plur":i["key"][:-1] + data["Fem"]["FORM"]["dat"]["plur"]},
+                                "sing":i["title_orthography"][:-1] + data["Fem"]["FORM"]["dat"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["dat"]["plur"]},
                             "abl":{
-                                "sing":i["key"][:-1] + data["Fem"]["FORM"]["abl"]["sing"], 
-                                "plur":i["key"][:-1] + data["Fem"]["FORM"]["abl"]["plur"]},
+                                "sing":i["title_orthography"][:-1] + data["Fem"]["FORM"]["abl"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["abl"]["plur"]},
                             "Def":i["senses"],
                             "weight":7}})
 
 os.remove(filename)
-with open(filename, 'w') as f:
-    json.dump(data, f, indent=4)
+with open(filename, 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=4, ensure_ascii=False)
