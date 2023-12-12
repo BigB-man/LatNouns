@@ -13,10 +13,12 @@ with open(filename, 'r',encoding='utf-8') as k:
     data = json.load(k)
 index = 0
 for j in letters:
+    os.chdir('files')
     sourcefile = 'ls_'+letters[index]+'.json'
     with open(sourcefile, 'r', encoding='utf-8') as f:
         source = json.load(f)
         index +=1
+    os.chdir(script_directory)
     for i in source:#declension 1, i still need to implement to change for masculine words
         if i["entry_type"] == "main":
             if i["part_of_speech"] == "noun":
@@ -37,9 +39,32 @@ for j in letters:
                                 "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["dat"]["plur"]},
                             "abl":{
                                 "sing":i["title_orthography"][:-1] + data["Fem"]["FORM"]["abl"]["sing"], 
-                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["abl"]["plur"]},
+                                "plur":i["title_orthography"][:-1] + data["Fem"]["FORM"]["abl"]["plur"]
+                            },
                             "Def":i["senses"],
-                            "weight":7}})
+                            "weight":7
+                            }})
+                    elif i["gender"] == "M":
+                        data["Masc"].update({i["key"]:{
+                            "nom":{
+                                "sing":i["title_orthography"][:-1] + data["Masc"]["FORM"]["nom"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Masc"]["FORM"]["nom"]["plur"]},
+                            "acc":{
+                                "sing":i["title_orthography"][:-1] + data["Masc"]["FORM"]["acc"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Masc"]["FORM"]["acc"]["plur"]},
+                            "gen":{
+                                "sing":i["title_orthography"][:-1] + data["Masc"]["FORM"]["gen"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Masc"]["FORM"]["gen"]["plur"]},
+                            "dat":{
+                                "sing":i["title_orthography"][:-1] + data["Masc"]["FORM"]["dat"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Masc"]["FORM"]["dat"]["plur"]},
+                            "abl":{
+                                "sing":i["title_orthography"][:-1] + data["Masc"]["FORM"]["abl"]["sing"], 
+                                "plur":i["title_orthography"][:-1] + data["Masc"]["FORM"]["abl"]["plur"]
+                            },
+                            "Def":i["senses"],
+                            "weight":7
+                            }})
 
 os.remove(filename)
 with open(filename, 'w', encoding='utf-8') as f:

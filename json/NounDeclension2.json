@@ -1,0 +1,38 @@
+{
+    "nom": 7,
+    "acc": 7,
+    "gen": 7,
+    "dat": 7,
+    "abl": 7,
+    "sing": 7,
+    "plur": 7,
+    "gender": 7,
+    "Fem": {
+        "FORM": {
+            "nom": {
+                "sing": "a",
+                "plur": "ae"
+            },
+            "acc": {
+                "sing": "am",
+                "plur": "ās"
+            },
+            "gen": {
+                "sing": "ae",
+                "plur": "ārum"
+            },
+            "dat": {
+                "sing": "ae",
+                "plur": "īs"
+            },
+            "abl": {
+                "sing": "ā",
+                "plur": "īs"
+            }
+        }
+    },
+    "Masc": {
+        
+    },
+    "Neut": {}
+}
