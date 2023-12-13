@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bman's Latin Noun Tester</title>
+	<link rel="stylesheet" href="style.css">
+
+  </head>
+  <body>
+    <h1 class="inline">Welcome to the Latin noun declension tester!</h1>
+    <input type="text" id="typeMe" value="">
+    <button id="add">+1</button>
+    <button id="subtract" onclick="cheddar()">-1</button>
+    Current value: <strong id="counter">0</strong>
+    <p>👋</p>
+	We are using Node.js <span id="node-version"></span>,
+    Chromium <span id="chrome-version"></span>,
+    and Electron <span id="electron-version"></span>.
+	<span id="path"></span>
+
+    <table>
+        <tr>
+            <th>Declension:</th>
+            <td class="container space-between"><button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>5</button></td>
+        </tr>
+        <tr>
+            <th>Gender:</th>
+            <td><button>Masculine</button>
+            <button>Feminine</button>
+            <button>Neuter</button></td>
+        </tr>
+        <tr>
+            <th>Case:</th>
+            <td><button>Nominative</button>
+            <button>Accusative</button>
+            <button>Gender</button>
+            <button>Dative</button>
+            <button>Ablative</button></td>
+        </tr>
+        <tr>
+            <th>Plurality:</th>
+            <td>
+                <button>Singular</button>
+                <button>Plural</button>
+            </td>
+        </tr>
+    </table>
+    <div style="width: 100%;text-align: center;"><button>SUBMIT</button></div>
+
+  
+  </body>
+</html>

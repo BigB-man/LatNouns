@@ -27,3 +27,19 @@ body {
 .inline{
 	display: inline;
 }
+td{
+	display: flex;
+	justify-content: space-around;            
+}
+td{
+  padding-bottom: 1em;
+}
+th{
+  padding-bottom: 1em;
+}
+table{
+	width: 100%;
+}
+th{
+	width:10%;
+}

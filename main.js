@@ -31,8 +31,16 @@ const createWindow = () => {
           label: 'Decrement'
         },
         {
+          click: () => win.loadFile('testDeclension.html'),
+          label: 'Tester'
+        },
+        {
           click:settingsTab,
           label: 'Settings'
+        },
+        {
+          click: () => win.loadFile('index.html'),
+          label: 'home'
         }
       ]
     }
