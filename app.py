@@ -4,7 +4,6 @@ import json
 import os
 import random
 # Create object 
-word=""
 def getLatinWord():
     # Get the directory of the current script
     script_directory = os.path.dirname(os.path.realpath(__file__))
@@ -57,8 +56,14 @@ def getLatinWord():
             data = json.load(k)
 
     print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
-    word=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
-
+    
+    # generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
+    # generatedWord = tk.Text(wordframe)
+    # generatedWord.pack()
+    for widget in wordframe.winfo_children():
+        widget.destroy()
+    generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
+    generatedWord.pack()
     # print(wordList)
     # print(chosenWord)
 
@@ -109,7 +114,13 @@ frame.pack(expand=True, fill="both", padx=20, pady=20)
 label = tk.Label(frame, text="chez")
 label.pack()
 
-genWord = tk.Button(frame, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord())
+# Create a frame to hold widgets
+wordframe = tk.Frame(frame, bg="")
+wordframe.pack(expand=True, fill="both", padx=20, pady=20)
+
+
+
+genWord = tk.Button(frame, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
 genWord.pack()
 
 # Center and fill the image
