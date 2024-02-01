@@ -18,6 +18,7 @@ def getLatinWord():
     wordList=[]
     wordCount = 0
     genders=["Fem","Masc","Neut"]
+    global chosenWord
 
     fileDecs = 'NounDeclensions.json'
     with open(fileDecs, 'r',encoding='utf-8') as k:
@@ -67,6 +68,11 @@ def getLatinWord():
     # print(wordList)
     # print(chosenWord)
 
+# def checkWord(case,plurality,gender):
+#     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
+#     with open(filename, 'r',encoding='utf-8') as k:
+#             data = json.load(k)
+#     if data[]
 
 
 def resize_image(event):
@@ -114,10 +120,44 @@ frame.pack(expand=True, fill="both", padx=20, pady=20)
 label = tk.Label(frame, text="chez")
 label.pack()
 
+
 # Create a frame to hold widgets
 wordframe = tk.Frame(frame, bg="")
-wordframe.pack(expand=True, fill="both", padx=20, pady=20)
+wordframe.pack()
 
+# Create a frame to hold widgets
+singular = tk.Frame(frame, bg="")
+singular.pack()
+nomSing = tk.Button(singular, text="Nominative singular", padx=10, pady=5, fg="white", bg="#262D42")
+nomSing.grid(row=0, column=0)
+
+accSing = tk.Button(singular, text="Accusative singular", padx=10, pady=5, fg="white", bg="#262D42")
+accSing.grid(row=1, column=0)
+
+genSing = tk.Button(singular, text="Genative singular", padx=10, pady=5, fg="white", bg="#262D42")
+genSing.grid(row=2, column=0)
+
+datSing = tk.Button(singular, text="Dative singular", padx=10, pady=5, fg="white", bg="#262D42")
+datSing.grid(row=3, column=0)
+
+ablSing = tk.Button(singular, text="Ablative singular", padx=10, pady=5, fg="white", bg="#262D42")
+ablSing.grid(row=4, column=0)
+
+
+nomPlur = tk.Button(singular, text="Nominative plural", padx=10, pady=5, fg="white", bg="#262D42")
+nomPlur.grid(row=0, column=1)
+
+accPlur = tk.Button(singular, text="Accusative plural", padx=10, pady=5, fg="white", bg="#262D42")
+accPlur.grid(row=1, column=1)
+
+genPlur = tk.Button(singular, text="Genative plural", padx=10, pady=5, fg="white", bg="#262D42")
+genPlur.grid(row=2, column=1)
+
+datPlur = tk.Button(singular, text="Dative plural", padx=10, pady=5, fg="white", bg="#262D42")
+datPlur.grid(row=3, column=1)
+
+ablPlur = tk.Button(singular, text="Ablative plural", padx=10, pady=5, fg="white", bg="#262D42")
+ablPlur.grid(row=4, column=1)
 
 
 genWord = tk.Button(frame, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
