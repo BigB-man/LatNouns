@@ -18,7 +18,7 @@ def getLatinWord():
     wordList=[]
     wordCount = 0
     genders=["Fem","Masc","Neut"]
-    global chosenWord
+    global chosenWord,chosenCase,chosenPlural
 
     fileDecs = 'NounDeclensions.json'
     with open(fileDecs, 'r',encoding='utf-8') as k:
@@ -30,7 +30,7 @@ def getLatinWord():
             data = json.load(k)
         for k in range(3):
             for i in data[genders[k]]:
-                for j in range(data[genders[k]][i]["weight"]*dataDecs["Declension"+str(key)]):
+                for j in range(data[genders[k]][i]["weight"]*dataDecs["Declension"+str(key)]*data["weight"][genders[k]]):
                     wordList.append([])
                     wordList[wordCount].append(i)
                     wordList[wordCount].append(genders[k])
@@ -68,11 +68,20 @@ def getLatinWord():
     # print(wordList)
     # print(chosenWord)
 
-# def checkWord(case,plurality,gender):
-#     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
-#     with open(filename, 'r',encoding='utf-8') as k:
-#             data = json.load(k)
-#     if data[]
+def checkWord():
+    filename = 'NounDeclension'+str(chosenWord[2])+'.json'
+    with open(filename, 'r',encoding='utf-8') as k:
+            data = json.load(k)
+    if(gender.get() != chosenWord[1]):
+         print("wrong")
+    elif(declension.get()!=str(chosenWord[2])):
+        print("wrong")
+    elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+         print("true")
+    else:
+         print("wrong")
+    print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
+    print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
 
 
 def resize_image(event):
@@ -117,51 +126,103 @@ canvas.pack(fill="both", expand=True)
 frame = tk.Frame(canvas, bg="")
 frame.pack(expand=True, fill="both", padx=20, pady=20)
 
-label = tk.Label(frame, text="chez")
-label.pack()
 
 
 # Create a frame to hold widgets
 wordframe = tk.Frame(frame, bg="")
 wordframe.pack()
-
+generatedWord = tk.Label(wordframe, text="Word", bg ="gray")
+generatedWord.pack()
 # Create a frame to hold widgets
-singular = tk.Frame(frame, bg="")
-singular.pack()
-nomSing = tk.Button(singular, text="Nominative singular", padx=10, pady=5, fg="white", bg="#262D42")
-nomSing.grid(row=0, column=0)
-
-accSing = tk.Button(singular, text="Accusative singular", padx=10, pady=5, fg="white", bg="#262D42")
-accSing.grid(row=1, column=0)
-
-genSing = tk.Button(singular, text="Genative singular", padx=10, pady=5, fg="white", bg="#262D42")
-genSing.grid(row=2, column=0)
-
-datSing = tk.Button(singular, text="Dative singular", padx=10, pady=5, fg="white", bg="#262D42")
-datSing.grid(row=3, column=0)
-
-ablSing = tk.Button(singular, text="Ablative singular", padx=10, pady=5, fg="white", bg="#262D42")
-ablSing.grid(row=4, column=0)
+choices = tk.Frame(frame, bg="")
+choices.pack()
 
 
-nomPlur = tk.Button(singular, text="Nominative plural", padx=10, pady=5, fg="white", bg="#262D42")
-nomPlur.grid(row=0, column=1)
+#Declension Choices
+DeclensionText = tk.Label(choices, text = "Declension:")
+DeclensionText.grid(row=0, column=0)
+declension = tk.StringVar(root, "1")
+ 
+# Dictionary to create multiple buttons
+values = {"First" : "1",
+          "Second" : "2",
+          "Third" : "3",
+          "Fourth" : "4",
+          "Fith" : "5"}
+ 
+# Loop is used to create multiple Radiobuttons
+# rather than creating each button separately
+count=1
+for (text, value) in values.items():
+    tk.Radiobutton(choices, text = text, variable = declension, 
+                value = value, indicator = 0,
+                background = "light blue").grid(row=0, column=count)
+    count+=1
 
-accPlur = tk.Button(singular, text="Accusative plural", padx=10, pady=5, fg="white", bg="#262D42")
-accPlur.grid(row=1, column=1)
+#Cases Choices
+caseText = tk.Label(choices, text = "Case:")
+caseText.grid(row=1, column=0)
+case = tk.StringVar(root, "1")
+# Dictionary to create multiple buttons
+values = {"Nominative" : "nom",
+          "Accusative" : "acc",
+          "Genative" : "gen",
+          "Dative" : "dat",
+          "Ablative" : "abl"}
+ 
+# Loop is used to create multiple Radiobuttons
+# rather than creating each button separately
+count=1
+for (text, value) in values.items():
+    tk.Radiobutton(choices, text = text, variable = case, 
+                value = value, indicator = 0,
+                background = "light blue").grid(row=1, column=count)
+    count+=1
 
-genPlur = tk.Button(singular, text="Genative plural", padx=10, pady=5, fg="white", bg="#262D42")
-genPlur.grid(row=2, column=1)
+#Declension words
+GenderText = tk.Label(choices, text = "Declension:")
+GenderText.grid(row=2, column=0)
+gender = tk.StringVar(root, "1")
+ 
+# Dictionary to create multiple buttons
+values = {"Feminine" : "Fem",
+          "Masculine" : "Masc",
+          "Neuter" : "Neut"}
+ 
+# Loop is used to create multiple Radiobuttons
+# rather than creating each button separately
+count=1
+for (text, value) in values.items():
+    tk.Radiobutton(choices, text = text, variable = gender, 
+                value = value, indicator = 0,
+                background = "light blue").grid(row=2, column=count)
+    count+=1
 
-datPlur = tk.Button(singular, text="Dative plural", padx=10, pady=5, fg="white", bg="#262D42")
-datPlur.grid(row=3, column=1)
+#Plural words
+PluralText = tk.Label(choices, text = "Plurality:")
+PluralText.grid(row=3, column=0)
+plural = tk.StringVar(root, "1")
+ 
+# Dictionary to create multiple buttons
+values = {"Singular" : "sing",
+          "Plural" : "plur"}
+ 
+# Loop is used to create multiple Radiobuttons
+# rather than creating each button separately
+count=1
+for (text, value) in values.items():
+    tk.Radiobutton(choices, text = text, variable = plural, 
+                value = value, indicator = 0,
+                background = "light blue").grid(row=3, column=count)
+    count+=1
 
-ablPlur = tk.Button(singular, text="Ablative plural", padx=10, pady=5, fg="white", bg="#262D42")
-ablPlur.grid(row=4, column=1)
 
 
 genWord = tk.Button(frame, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
 genWord.pack()
+
+checkWordButton = tk.Button(frame, text="CheckWord", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
+checkWordButton.pack()
 
 # Center and fill the image
 bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
