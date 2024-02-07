@@ -127,15 +127,29 @@ def decrementWeight():#remember to add edit to declension weight
     val = set()
     for i in cases:
         for j in pluralOptions:
-            if[data[chosenWord[1]][chosenWord[0]][i][j] == word]:
+            if(data[chosenWord[1]][chosenWord[0]][i][j] == word):
                 val.add(i)
                 val.add(j) 
     for k in val:
         if(data[k] > 0):
             data[k] -=1
+    print(val)
     os.remove(filename)
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
+    
+    
+    fileDecs = 'NounDeclensions.json'
+    with open(fileDecs, 'r',encoding='utf-8') as k:
+        dataDecs = json.load(k)
+    
+    if(dataDecs["Declension"+str(chosenWord[2])] > 0):
+        dataDecs["Declension"+str(chosenWord[2])] -= 1
+    os.remove(fileDecs)
+    with open(fileDecs, 'w', encoding='utf-8') as f:
+        json.dump(dataDecs, f, indent=4, ensure_ascii=False)
+    
+    
 
 
 
