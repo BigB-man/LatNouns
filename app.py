@@ -3,6 +3,10 @@ import tkinter as tk
 import json
 import os
 import random
+genders=["Fem","Masc","Neut"]
+cases= ["nom","acc","gen","dat","abl"]
+pluralOptions = ["sing","plur"]
+
 # Create object 
 def getLatinWord():
     # Get the directory of the current script
@@ -17,8 +21,8 @@ def getLatinWord():
     key=1
     wordList=[]
     wordCount = 0
-    genders=["Fem","Masc","Neut"]
-    global chosenWord,chosenCase,chosenPlural
+    
+    global chosenWord,chosenCase,chosenPlural, word
 
     fileDecs = 'NounDeclensions.json'
     with open(fileDecs, 'r',encoding='utf-8') as k:
@@ -46,7 +50,7 @@ def getLatinWord():
     chosenCase =random.choice(caseNoun)
 
     plurality =[]
-    pluralOptions = ["sing","plur"]
+    
     for n in range(2):
         for o in range(data[pluralOptions[n]]):
             plurality.append(pluralOptions[n])
@@ -67,6 +71,7 @@ def getLatinWord():
     generatedWord.pack()
     # print(wordList)
     # print(chosenWord)
+    word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
 
 def checkWord():
     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
@@ -74,12 +79,15 @@ def checkWord():
             data = json.load(k)
     if(gender.get() != chosenWord[1]):
          print("wrong")
+         decrementWeight()
     elif(declension.get()!=str(chosenWord[2])):
         print("wrong")
+        decrementWeight()
     elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
          print("true")
     else:
          print("wrong")
+         decrementWeight()
     print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
     print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
 
@@ -107,12 +115,36 @@ def resize_image(event):
     canvas.itemconfig(bg_image_id, image=bg_image)
     canvas.coords(bg_image_id, window_width/2, window_height/2)
 
+def decrementWeight():#remember to add edit to declension weight
+    filename = 'NounDeclension'+str(chosenWord[2])+'.json' 
+    with open(filename, 'r',encoding='utf-8') as k:
+        data = json.load(k)
+    word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
+    if(data[chosenWord[1]][chosenWord[0]]["weight"] > 0):
+        data[chosenWord[1]][chosenWord[0]]["weight"] -=1
+    if(data["weight"][chosenWord[1]] > 0):
+        data["weight"][chosenWord[1]] -= 1
+    val = set()
+    for i in cases:
+        for j in pluralOptions:
+            if[data[chosenWord[1]][chosenWord[0]][i][j] == word]:
+                val.add(i)
+                val.add(j) 
+    for k in val:
+        if(data[k] > 0):
+            data[k] -=1
+    os.remove(filename)
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+
+
 # Create the main window
 root = tk.Tk()
-root.title("Background Image Example")
+root.title("Latin Noun Tester")
 
 
-root.geometry("1080x720")
+root.geometry("720x480")
 
 # Load the image file
 bg_image_orig = tk.PhotoImage(file="images/pomp.png")
