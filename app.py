@@ -189,6 +189,14 @@ def resetWeightFunc():
         os.remove(filename)
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
+    filename = 'NounDeclensions.json'
+    filenameO = 'base/NounDeclensions.json'
+    with open(filenameO, 'r',encoding='utf-8') as k:
+        dataOrigin = json.load(k)
+    key+=1
+    os.remove(filename)
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
         
 def settingsWindow():
     settingsWindow = tk.Toplevel(root)
