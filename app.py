@@ -171,8 +171,24 @@ canvas.pack(fill="both", expand=True)
 # Create a frame to hold widgets
 frame = tk.Frame(canvas, bg="")
 frame.pack(expand=True, fill="both", padx=20, pady=20)
+header = tk.Frame(frame, bg="")
+header.pack(fill='x')
+
+def settingsWindow():
+    settingsWindow = tk.Toplevel(root)
+    settingsWindow.title("Settings")
+    settingsWindow.geometry("480x480")
+    settingsWindow.grab_set()
+    resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, pady=5, fg="white", bg="#262D42")
+    resetWeight.pack()
+    customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
+    customBackground.pack()
 
 
+photo = tk.PhotoImage(file="images/settings.png")
+photo = photo.subsample(int(photo.width() / 75), int(photo.height() / 50))
+settingsButton = tk.Button(header,text="Settings",image=photo, command=lambda:settingsWindow())
+settingsButton.pack(side = "right")
 
 # Create a frame to hold widgets
 wordframe = tk.Frame(frame, bg="")
@@ -269,6 +285,9 @@ genWord.pack()
 
 checkWordButton = tk.Button(frame, text="CheckWord", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
 checkWordButton.pack()
+
+
+
 
 # Center and fill the image
 bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
