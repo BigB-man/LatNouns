@@ -173,13 +173,29 @@ frame = tk.Frame(canvas, bg="")
 frame.pack(expand=True, fill="both", padx=20, pady=20)
 header = tk.Frame(frame, bg="")
 header.pack(fill='x')
+def resetWeightFunc():
+    script_directory = os.path.dirname(os.path.realpath(__file__))
 
+    # Set the working directory to the script's directory
+    os.chdir(script_directory)
+    os.chdir("json")
+    key=1
+    while key<6:
+        filename = 'NounDeclension'+str(key)+'.json'
+        filenameO = 'base/NounDeclension'+str(key)+'.json'
+        with open(filenameO, 'r',encoding='utf-8') as k:
+            dataOrigin = json.load(k)
+        key+=1
+        os.remove(filename)
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
+        
 def settingsWindow():
     settingsWindow = tk.Toplevel(root)
     settingsWindow.title("Settings")
     settingsWindow.geometry("480x480")
     settingsWindow.grab_set()
-    resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, pady=5, fg="white", bg="#262D42")
+    resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, pady=5, fg="white", bg="#262D42", command=resetWeightFunc)
     resetWeight.pack()
     customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
     customBackground.pack()
