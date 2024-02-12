@@ -120,9 +120,9 @@ def decrementWeight():#remember to add edit to declension weight
     with open(filename, 'r',encoding='utf-8') as k:
         data = json.load(k)
     word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
-    if(data[chosenWord[1]][chosenWord[0]]["weight"] > 0):
+    if(data[chosenWord[1]][chosenWord[0]]["weight"] > 1):
         data[chosenWord[1]][chosenWord[0]]["weight"] -=1
-    if(data["weight"][chosenWord[1]] > 0):
+    if(data["weight"][chosenWord[1]] > 1):
         data["weight"][chosenWord[1]] -= 1
     val = set()
     for i in cases:
@@ -131,7 +131,7 @@ def decrementWeight():#remember to add edit to declension weight
                 val.add(i)
                 val.add(j) 
     for k in val:
-        if(data[k] > 0):
+        if(data[k] > 1):
             data[k] -=1
     print(val)
     os.remove(filename)
@@ -143,7 +143,7 @@ def decrementWeight():#remember to add edit to declension weight
     with open(fileDecs, 'r',encoding='utf-8') as k:
         dataDecs = json.load(k)
     
-    if(dataDecs["Declension"+str(chosenWord[2])] > 0):
+    if(dataDecs["Declension"+str(chosenWord[2])] > 1):
         dataDecs["Declension"+str(chosenWord[2])] -= 1
     os.remove(fileDecs)
     with open(fileDecs, 'w', encoding='utf-8') as f:
