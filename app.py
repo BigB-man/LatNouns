@@ -266,7 +266,7 @@ for (text, value) in values.items():
     count+=1
 
 #Declension words
-GenderText = tk.Label(choices, text = "Declension:")
+GenderText = tk.Label(choices, text = "Gender:")
 GenderText.grid(row=2, column=0)
 gender = tk.StringVar(root, "1")
  
