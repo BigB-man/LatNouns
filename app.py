@@ -4,6 +4,7 @@ import json
 import os
 import random
 genders=["Fem","Masc","Neut"]
+
 cases= ["nom","acc","gen","dat","abl"]
 pluralOptions = ["sing","plur"]
 
@@ -72,6 +73,10 @@ def getLatinWord():
     # print(wordList)
     # print(chosenWord)
     word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
+    declensionTrueLabel.config(text="",bg="white")
+    caseTrueLabel.config(text="",bg="white")
+    genderTrueLabel.config(text="", bg="white")
+    pluralTrueLabel.config(text="",bg="white")
 
 def checkWord():
     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
@@ -79,17 +84,44 @@ def checkWord():
             data = json.load(k)
     if(gender.get() != chosenWord[1]):
          print("wrong")
-         decrementWeight()
+         incrementWeight()
     elif(declension.get()!=str(chosenWord[2])):
         print("wrong")
-        decrementWeight()
+        incrementWeight()
     elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
          print("true")
+         decrementWeight()
     else:
          print("wrong")
-         decrementWeight()
+         incrementWeight()
     print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
     print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
+    global genderTrue, caseTrue,pluralTrue,declensionTrue
+    genderTrue = "❌"
+    genderColor = "red"
+    caseTrue = "❌"
+    caseColor = "red"
+    pluralTrue = "❌"
+    pluralColor = "red"
+    declensionTrue = "❌"
+    declensionColor = "red"
+    if(gender.get() == chosenWord[1]):
+        genderTrue = "✔️"
+        genderColor = "green"
+    if(declension.get()==str(chosenWord[2])):
+        declensionTrue ="✔️"
+        declensionColor = "green"
+    if(data[chosenWord[1]][chosenWord[0]][case.get()][chosenPlural] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+        caseTrue = "✔️"
+        caseColor = "green"
+    if(data[chosenWord[1]][chosenWord[0]][chosenCase][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+        pluralTrue = "✔️"
+        pluralColor = "green"
+    declensionTrueLabel.config(text=declensionTrue,bg=declensionColor)
+    caseTrueLabel.config(text=caseTrue,bg=caseColor)
+    genderTrueLabel.config(text=genderTrue, bg=genderColor)
+    pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
+    
 
 
 def resize_image(event):
@@ -120,9 +152,9 @@ def decrementWeight():#remember to add edit to declension weight
     with open(filename, 'r',encoding='utf-8') as k:
         data = json.load(k)
     word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
-    if(data[chosenWord[1]][chosenWord[0]]["weight"] > 0):
+    if(data[chosenWord[1]][chosenWord[0]]["weight"] > 1):
         data[chosenWord[1]][chosenWord[0]]["weight"] -=1
-    if(data["weight"][chosenWord[1]] > 0):
+    if(data["weight"][chosenWord[1]] > 1):
         data["weight"][chosenWord[1]] -= 1
     val = set()
     for i in cases:
@@ -131,7 +163,7 @@ def decrementWeight():#remember to add edit to declension weight
                 val.add(i)
                 val.add(j) 
     for k in val:
-        if(data[k] > 0):
+        if(data[k] > 1):
             data[k] -=1
     print(val)
     os.remove(filename)
@@ -143,20 +175,52 @@ def decrementWeight():#remember to add edit to declension weight
     with open(fileDecs, 'r',encoding='utf-8') as k:
         dataDecs = json.load(k)
     
-    if(dataDecs["Declension"+str(chosenWord[2])] > 0):
+    if(dataDecs["Declension"+str(chosenWord[2])] > 1):
         dataDecs["Declension"+str(chosenWord[2])] -= 1
     os.remove(fileDecs)
     with open(fileDecs, 'w', encoding='utf-8') as f:
         json.dump(dataDecs, f, indent=4, ensure_ascii=False)
     
+def incrementWeight():#remember to add edit to declension weight
+    filename = 'NounDeclension'+str(chosenWord[2])+'.json' 
+    with open(filename, 'r',encoding='utf-8') as k:
+        data = json.load(k)
+    word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
+    if(data[chosenWord[1]][chosenWord[0]]["weight"] < 10):
+        data[chosenWord[1]][chosenWord[0]]["weight"] +=1
+    if(data["weight"][chosenWord[1]] < 10):
+        data["weight"][chosenWord[1]] += 1
+    val = set()
+    for i in cases:
+        for j in pluralOptions:
+            if(data[chosenWord[1]][chosenWord[0]][i][j] == word):
+                val.add(i)
+                val.add(j) 
+    for k in val:
+        if(data[k] < 10):
+            data[k] +=1
+    print(val)
+    os.remove(filename)
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
     
+    
+    fileDecs = 'NounDeclensions.json'
+    with open(fileDecs, 'r',encoding='utf-8') as k:
+        dataDecs = json.load(k)
+    
+    if(dataDecs["Declension"+str(chosenWord[2])] < 10):
+        dataDecs["Declension"+str(chosenWord[2])] += 1
+    os.remove(fileDecs)
+    with open(fileDecs, 'w', encoding='utf-8') as f:
+        json.dump(dataDecs, f, indent=4, ensure_ascii=False)    
 
 
 
 # Create the main window
 root = tk.Tk()
 root.title("Latin Noun Tester")
-
+#root.wm_attributes('-transparentcolor','#ab23ff')
 
 root.geometry("720x480")
 
@@ -217,18 +281,24 @@ settingsButton.pack(side = "right")
 # Create a frame to hold widgets
 wordframe = tk.Frame(frame, bg="")
 wordframe.pack()
-generatedWord = tk.Label(wordframe, text="Word", bg ="gray")
+generatedWord = tk.Label(wordframe, text="Word🗿", bg ="gray")
 generatedWord.pack()
 # Create a frame to hold widgets
-choices = tk.Frame(frame, bg="")
-choices.pack()
-
+buttons = tk.Frame(frame, bg="")
+buttons.pack()
+choices = tk.Frame(buttons, bg="")
+choices.grid(row=0,column=1)
+results = tk.Frame(buttons, bg="")
+results.grid(row=0,column=2)
+labels = tk.Frame(buttons, bg="")
+labels.grid(row=0,column=0)
 
 #Declension Choices
-DeclensionText = tk.Label(choices, text = "Declension:")
-DeclensionText.grid(row=0, column=0)
+DeclensionText = tk.Label(labels, text = "Declension:")
+DeclensionText.pack()
 declension = tk.StringVar(root, "1")
- 
+declensionButtons = tk.Frame(choices, bg="")
+declensionButtons.pack()
 # Dictionary to create multiple buttons
 values = {"First" : "1",
           "Second" : "2",
@@ -240,14 +310,18 @@ values = {"First" : "1",
 # rather than creating each button separately
 count=1
 for (text, value) in values.items():
-    tk.Radiobutton(choices, text = text, variable = declension, 
+    tk.Radiobutton(declensionButtons, text = text, variable = declension, 
                 value = value, indicator = 0,
                 background = "light blue").grid(row=0, column=count)
     count+=1
+declensionTrueLabel = tk.Label(results,text="",bg="white")
+declensionTrueLabel.pack()
 
 #Cases Choices
-caseText = tk.Label(choices, text = "Case:")
-caseText.grid(row=1, column=0)
+caseButtons = tk.Frame(choices, bg="")
+caseButtons.pack()
+caseText = tk.Label(labels, text = "Case:")
+caseText.pack()
 case = tk.StringVar(root, "1")
 # Dictionary to create multiple buttons
 values = {"Nominative" : "nom",
@@ -260,14 +334,17 @@ values = {"Nominative" : "nom",
 # rather than creating each button separately
 count=1
 for (text, value) in values.items():
-    tk.Radiobutton(choices, text = text, variable = case, 
+    tk.Radiobutton(caseButtons, text = text, variable = case, 
                 value = value, indicator = 0,
                 background = "light blue").grid(row=1, column=count)
     count+=1
-
+caseTrueLabel = tk.Label(results,text="",bg="white")
+caseTrueLabel.pack()
 #Declension words
-GenderText = tk.Label(choices, text = "Gender:")
-GenderText.grid(row=2, column=0)
+genderButtons = tk.Frame(choices, bg="")
+genderButtons.pack()
+GenderText = tk.Label(labels, text = "Gender:")
+GenderText.pack()
 gender = tk.StringVar(root, "1")
  
 # Dictionary to create multiple buttons
@@ -279,16 +356,18 @@ values = {"Feminine" : "Fem",
 # rather than creating each button separately
 count=1
 for (text, value) in values.items():
-    tk.Radiobutton(choices, text = text, variable = gender, 
+    tk.Radiobutton(genderButtons, text = text, variable = gender, 
                 value = value, indicator = 0,
-                background = "light blue").grid(row=2, column=count)
+                background = "light blue",width=int(choices.winfo_width()/len(value))).grid(row=2, column=count)
     count+=1
-
+genderTrueLabel = tk.Label(results,text="",bg="white")
+genderTrueLabel.pack()
 #Plural words
-PluralText = tk.Label(choices, text = "Plurality:")
-PluralText.grid(row=3, column=0)
+PluralText = tk.Label(labels, text = "Plurality:")
+PluralText.pack()
 plural = tk.StringVar(root, "1")
- 
+pluralButtons = tk.Frame(choices, bg="")
+pluralButtons.pack()
 # Dictionary to create multiple buttons
 values = {"Singular" : "sing",
           "Plural" : "plur"}
@@ -297,12 +376,14 @@ values = {"Singular" : "sing",
 # rather than creating each button separately
 count=1
 for (text, value) in values.items():
-    tk.Radiobutton(choices, text = text, variable = plural, 
+    tk.Radiobutton(pluralButtons, text = text, variable = plural, 
                 value = value, indicator = 0,
                 background = "light blue").grid(row=3, column=count)
     count+=1
+pluralTrueLabel = tk.Label(results,text="",bg="white")
+pluralTrueLabel.pack()
 
-
+pluralButtons.grid_columnconfigure(1, weight=1)
 
 genWord = tk.Button(frame, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
 genWord.pack()
