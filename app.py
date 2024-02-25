@@ -7,15 +7,12 @@ genders=["Fem","Masc","Neut"]
 
 cases= ["nom","acc","gen","dat","abl"]
 pluralOptions = ["sing","plur"]
-
+print(os. getcwd())
+os.chdir("json")
 # Create object 
 def getLatinWord():
     # Get the directory of the current script
-    script_directory = os.path.dirname(os.path.realpath(__file__))
-
-    # Set the working directory to the script's directory
-    os.chdir(script_directory)
-    os.chdir("json")
+    
     #print(script_directory)
 
 
@@ -225,9 +222,10 @@ root.title("Latin Noun Tester")
 root.geometry("720x480")
 
 # Load the image file
+os.chdir('..')
 bg_image_orig = tk.PhotoImage(file="images/pomp.png")
 bg_image = bg_image_orig
-
+os.chdir('json')
 # Create a canvas
 canvas = tk.Canvas(root, bg="#dbfcff")
 canvas.pack(fill="both", expand=True)
@@ -238,11 +236,6 @@ frame.pack(expand=True, fill="both", padx=20, pady=20)
 header = tk.Frame(frame, bg="")
 header.pack(fill='x')
 def resetWeightFunc():
-    script_directory = os.path.dirname(os.path.realpath(__file__))
-
-    # Set the working directory to the script's directory
-    os.chdir(script_directory)
-    os.chdir("json")
     key=1
     while key<6:
         filename = 'NounDeclension'+str(key)+'.json'
@@ -272,8 +265,9 @@ def settingsWindow():
     customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
     customBackground.pack()
 
-
+os.chdir('..')
 photo = tk.PhotoImage(file="images/settings.png")
+os.chdir('json')
 photo = photo.subsample(int(photo.width() / 75), int(photo.height() / 50))
 settingsButton = tk.Button(header,text="Settings",image=photo, command=lambda:settingsWindow())
 settingsButton.pack(side = "right")
