@@ -1,3 +1,3 @@
 pomp.png - https://commons.wikimedia.org/wiki/File:Pompeii%26Vesuvius.JPG
-Image Icon was made from (was edited): <a href=" https://www.vectorportal.com" >Vectorportal.com</a>,  <a class="external text" href="https://creativecommons.org/licenses/by/4.0/" >CC BY</a>
+Image Icon used a helmet from: <a href=" https://vectorportal.com/vector/ancient-helmet-clip-art-vector/3017" >Vectorportal.com</a>,  <a class="external text" href="https://creativecommons.org/licenses/by/4.0/" >CC BY</a>
 singular checkbox: https://www.geeksforgeeks.org/radiobutton-in-tkinter-python/

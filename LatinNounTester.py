@@ -3,6 +3,13 @@ import tkinter as tk
 import json
 import os
 import random
+# Create the main window
+root = tk.Tk()
+root.title("Latin Noun Tester")
+#root.wm_attributes('-transparentcolor','#ab23ff')
+root.iconbitmap("images/NounDeclension.ico")
+
+root.geometry("720x480")
 genders=["Fem","Masc","Neut"]
 
 cases= ["nom","acc","gen","dat","abl"]
@@ -214,12 +221,7 @@ def incrementWeight():#remember to add edit to declension weight
 
 
 
-# Create the main window
-root = tk.Tk()
-root.title("Latin Noun Tester")
-#root.wm_attributes('-transparentcolor','#ab23ff')
 
-root.geometry("720x480")
 
 # Load the image file
 os.chdir('..')

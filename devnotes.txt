@@ -1,6 +1,1 @@
-to run app type $ npm run start
-
-to install electron storage $ npm install --save electron-storage
-https://github.com/Cocycles/electron-storage
-
-use https://github.com/IohannesArnold/lewis-short-json/blob/master/README.md for data to build json
+pyinstaller --noconfirm --onefile --windowed  "LatinNounTester.py"
