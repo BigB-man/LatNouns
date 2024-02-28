@@ -11,7 +11,8 @@ root.iconbitmap("images/SquareNounDeclension.ico")
 
 root.geometry("680x380")
 genders=["Fem","Masc","Neut"]
-
+guessLimit = 1
+currentGuesses = 0
 cases= ["nom","acc","gen","dat","abl"]
 pluralOptions = ["sing","plur"]
 print(os. getcwd())
@@ -81,6 +82,7 @@ def getLatinWord():
     caseTrueLabel.config(text="",bg="white")
     genderTrueLabel.config(text="", bg="white")
     pluralTrueLabel.config(text="",bg="white")
+    checkWordButton.pack()
 
 def checkWord():
     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
@@ -100,7 +102,7 @@ def checkWord():
          incrementWeight()
     print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
     print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
-    global genderTrue, caseTrue,pluralTrue,declensionTrue
+    global genderTrue, caseTrue,pluralTrue,declensionTrue, currentGuesses
     genderTrue = "❌"
     genderColor = "red"
     caseTrue = "❌"
@@ -110,21 +112,28 @@ def checkWord():
     declensionTrue = "❌"
     declensionColor = "red"
     if(gender.get() == chosenWord[1]):
-        genderTrue = "✔️"
+        genderTrue = "✓"
         genderColor = "green"
     if(declension.get()==str(chosenWord[2])):
-        declensionTrue ="✔️"
+        declensionTrue ="✓"
         declensionColor = "green"
     if(data[chosenWord[1]][chosenWord[0]][case.get()][chosenPlural] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-        caseTrue = "✔️"
+        caseTrue = "✓"
         caseColor = "green"
     if(data[chosenWord[1]][chosenWord[0]][chosenCase][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-        pluralTrue = "✔️"
+        pluralTrue = "✓"
         pluralColor = "green"
     declensionTrueLabel.config(text=declensionTrue,bg=declensionColor)
     caseTrueLabel.config(text=caseTrue,bg=caseColor)
     genderTrueLabel.config(text=genderTrue, bg=genderColor)
     pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
+    currentGuesses += 1
+    if(genderColor==caseColor and caseColor == pluralColor and pluralColor == declensionColor and declensionColor == "green"):
+        currentGuesses = 0
+        checkWordButton.pack_forget()
+    if(currentGuesses >= guessLimit):
+        currentGuesses = 0
+        checkWordButton.pack_forget()
     
 
 
@@ -264,8 +273,32 @@ def settingsWindow():
     settingsWindow.grab_set()
     resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, pady=5, fg="white", bg="#262D42", command=resetWeightFunc)
     resetWeight.pack()
-    customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
-    customBackground.pack()
+    # customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
+    # customBackground.pack()
+
+    LimitFrame = tk.Frame(settingsWindow, padx=10)
+    LimitFrame.pack()
+    LimitLabel = tk.Label(LimitFrame, text="Guess Limit:")
+    LimitLabel.grid(row=1, column=0)
+    guess = tk.IntVar(root, "1")
+    # Dictionary to create multiple buttons
+    values = {"1" : 1,
+            "2" : 2,
+            "3" : 3,}
+    
+    # Loop is used to create multiple Radiobuttons
+    # rather than creating each button separately
+    count=1
+    for (text, value) in values.items():
+        tk.Radiobutton(LimitFrame, text = text, variable = guess, 
+                    value = value, indicator = 0,
+                    background = "light blue").grid(row=1, column=count)
+        count+=1
+    def submit():
+        global guessLimit
+        guessLimit = guess.get()
+    submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="#262D42", command=submit)
+    submitButton.grid(row=1, column=4)
 
 os.chdir('..')
 photo = tk.PhotoImage(file="images/settings.png")
@@ -381,10 +414,10 @@ pluralTrueLabel.pack()
 
 pluralButtons.grid_columnconfigure(1, weight=1)
 
-genWord = tk.Button(canvas, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
+genWord = tk.Button(canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
 genWord.pack()
 
-checkWordButton = tk.Button(canvas, text="CheckWord", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
+checkWordButton = tk.Button(canvas, text="Check Word", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
 checkWordButton.pack()
 
 
