@@ -7,9 +7,9 @@ import random
 root = tk.Tk()
 root.title("Latin Noun Tester")
 #root.wm_attributes('-transparentcolor','#ab23ff')
-root.iconbitmap("images/NounDeclension.ico")
+root.iconbitmap("images/SquareNounDeclension.ico")
 
-root.geometry("720x480")
+root.geometry("680x380")
 genders=["Fem","Masc","Neut"]
 
 cases= ["nom","acc","gen","dat","abl"]
@@ -129,9 +129,7 @@ def checkWord():
 
 
 def resize_image(event):
-    """
-    Function to resize the image when the window size changes
-    """
+
     global bg_image, bg_image_id
     window_width = event.width
     window_height = event.height
@@ -150,6 +148,7 @@ def resize_image(event):
     bg_image = bg_image_orig.subsample(int(bg_image_orig.width() / new_width), int(bg_image_orig.height() / new_height))
     canvas.itemconfig(bg_image_id, image=bg_image)
     canvas.coords(bg_image_id, window_width/2, window_height/2)
+    
 
 def decrementWeight():#remember to add edit to declension weight
     filename = 'NounDeclension'+str(chosenWord[2])+'.json' 
@@ -222,7 +221,6 @@ def incrementWeight():#remember to add edit to declension weight
 
 
 
-
 # Load the image file
 os.chdir('..')
 bg_image_orig = tk.PhotoImage(file="images/pomp.png")
@@ -233,10 +231,12 @@ canvas = tk.Canvas(root, bg="#dbfcff")
 canvas.pack(fill="both", expand=True)
 
 # Create a frame to hold widgets
-frame = tk.Frame(canvas, bg="")
-frame.pack(expand=True, fill="both", padx=20, pady=20)
-header = tk.Frame(frame, bg="")
+
+header = tk.Frame(canvas, bg="")
 header.pack(fill='x')
+
+
+
 def resetWeightFunc():
     key=1
     while key<6:
@@ -260,7 +260,7 @@ def resetWeightFunc():
 def settingsWindow():
     settingsWindow = tk.Toplevel(root)
     settingsWindow.title("Settings")
-    settingsWindow.geometry("480x480")
+    settingsWindow.geometry("280x280")
     settingsWindow.grab_set()
     resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, pady=5, fg="white", bg="#262D42", command=resetWeightFunc)
     resetWeight.pack()
@@ -275,12 +275,12 @@ settingsButton = tk.Button(header,text="Settings",image=photo, command=lambda:se
 settingsButton.pack(side = "right")
 
 # Create a frame to hold widgets
-wordframe = tk.Frame(frame, bg="")
+wordframe = tk.Frame(canvas, bg="")
 wordframe.pack()
 generatedWord = tk.Label(wordframe, text="Word🗿", bg ="gray")
 generatedWord.pack()
 # Create a frame to hold widgets
-buttons = tk.Frame(frame, bg="")
+buttons = tk.Frame(canvas, bg="")
 buttons.pack()
 choices = tk.Frame(buttons, bg="")
 choices.grid(row=0,column=1)
@@ -310,7 +310,7 @@ for (text, value) in values.items():
                 value = value, indicator = 0,
                 background = "light blue").grid(row=0, column=count)
     count+=1
-declensionTrueLabel = tk.Label(results,text="",bg="white")
+declensionTrueLabel = tk.Label(results,text="",bg="white", width=2)
 declensionTrueLabel.pack()
 
 #Cases Choices
@@ -334,7 +334,7 @@ for (text, value) in values.items():
                 value = value, indicator = 0,
                 background = "light blue").grid(row=1, column=count)
     count+=1
-caseTrueLabel = tk.Label(results,text="",bg="white")
+caseTrueLabel = tk.Label(results,text="",bg="white", width=2)
 caseTrueLabel.pack()
 #Declension words
 genderButtons = tk.Frame(choices, bg="")
@@ -356,7 +356,7 @@ for (text, value) in values.items():
                 value = value, indicator = 0,
                 background = "light blue",width=int(choices.winfo_width()/len(value))).grid(row=2, column=count)
     count+=1
-genderTrueLabel = tk.Label(results,text="",bg="white")
+genderTrueLabel = tk.Label(results,text="",bg="white", width=2)
 genderTrueLabel.pack()
 #Plural words
 PluralText = tk.Label(labels, text = "Plurality:")
@@ -376,15 +376,15 @@ for (text, value) in values.items():
                 value = value, indicator = 0,
                 background = "light blue").grid(row=3, column=count)
     count+=1
-pluralTrueLabel = tk.Label(results,text="",bg="white")
+pluralTrueLabel = tk.Label(results,text="",bg="white", width=2)
 pluralTrueLabel.pack()
 
 pluralButtons.grid_columnconfigure(1, weight=1)
 
-genWord = tk.Button(frame, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
+genWord = tk.Button(canvas, text="Generate Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
 genWord.pack()
 
-checkWordButton = tk.Button(frame, text="CheckWord", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
+checkWordButton = tk.Button(canvas, text="CheckWord", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
 checkWordButton.pack()
 
 
@@ -393,6 +393,8 @@ checkWordButton.pack()
 # Center and fill the image
 bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
 canvas.bind("<Configure>", resize_image)
+
+root.resizable(0, 0) 
 
 # Run the Tkinter event loop
 root.mainloop()
