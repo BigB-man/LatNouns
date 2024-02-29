@@ -134,7 +134,7 @@ def checkWord():
     if(currentGuesses >= guessLimit):
         currentGuesses = 0
         checkWordButton.pack_forget()
-    
+   
 
 
 def resize_image(event):
@@ -228,8 +228,6 @@ def incrementWeight():#remember to add edit to declension weight
         json.dump(dataDecs, f, indent=4, ensure_ascii=False)    
 
 
-
-
 # Load the image file
 os.chdir('..')
 bg_image_orig = tk.PhotoImage(file="images/pomp.png")
@@ -271,12 +269,12 @@ def settingsWindow():
     settingsWindow.title("Settings")
     settingsWindow.geometry("280x280")
     settingsWindow.grab_set()
-    resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, pady=5, fg="white", bg="#262D42", command=resetWeightFunc)
+    resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, fg="white", bg="dark blue", command=resetWeightFunc)
     resetWeight.pack()
     # customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
     # customBackground.pack()
 
-    LimitFrame = tk.Frame(settingsWindow, padx=10)
+    LimitFrame = tk.Frame(settingsWindow, pady=10)
     LimitFrame.pack()
     LimitLabel = tk.Label(LimitFrame, text="Guess Limit:")
     LimitLabel.grid(row=1, column=0)
@@ -292,12 +290,12 @@ def settingsWindow():
     for (text, value) in values.items():
         tk.Radiobutton(LimitFrame, text = text, variable = guess, 
                     value = value, indicator = 0,
-                    background = "light blue").grid(row=1, column=count)
+                    background = "light blue",fg="black").grid(row=1, column=count)
         count+=1
     def submit():
         global guessLimit
         guessLimit = guess.get()
-    submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="#262D42", command=submit)
+    submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="dark blue", command=submit)
     submitButton.grid(row=1, column=4)
 
 os.chdir('..')
@@ -308,18 +306,18 @@ settingsButton = tk.Button(header,text="Settings",image=photo, command=lambda:se
 settingsButton.pack(side = "right")
 
 # Create a frame to hold widgets
-wordframe = tk.Frame(canvas, bg="")
+wordframe = tk.Frame(canvas)
 wordframe.pack()
 generatedWord = tk.Label(wordframe, text="Word🗿", bg ="gray")
 generatedWord.pack()
 # Create a frame to hold widgets
-buttons = tk.Frame(canvas, bg="")
+buttons = tk.Frame(canvas)
 buttons.pack()
-choices = tk.Frame(buttons, bg="")
+choices = tk.Frame(buttons)
 choices.grid(row=0,column=1)
-results = tk.Frame(buttons, bg="")
+results = tk.Frame(buttons)
 results.grid(row=0,column=2)
-labels = tk.Frame(buttons, bg="")
+labels = tk.Frame(buttons)
 labels.grid(row=0,column=0)
 
 #Declension Choices
@@ -341,7 +339,7 @@ count=1
 for (text, value) in values.items():
     tk.Radiobutton(declensionButtons, text = text, variable = declension, 
                 value = value, indicator = 0,
-                background = "light blue").grid(row=0, column=count)
+                background = "light blue",fg="black").grid(row=0, column=count)
     count+=1
 declensionTrueLabel = tk.Label(results,text="",bg="white", width=2)
 declensionTrueLabel.pack()
@@ -365,7 +363,7 @@ count=1
 for (text, value) in values.items():
     tk.Radiobutton(caseButtons, text = text, variable = case, 
                 value = value, indicator = 0,
-                background = "light blue").grid(row=1, column=count)
+                background = "light blue",fg="black").grid(row=1, column=count)
     count+=1
 caseTrueLabel = tk.Label(results,text="",bg="white", width=2)
 caseTrueLabel.pack()
@@ -387,7 +385,7 @@ count=1
 for (text, value) in values.items():
     tk.Radiobutton(genderButtons, text = text, variable = gender, 
                 value = value, indicator = 0,
-                background = "light blue",width=int(choices.winfo_width()/len(value))).grid(row=2, column=count)
+                background = "light blue",fg="black",width=int(choices.winfo_width()/len(value))).grid(row=2, column=count)
     count+=1
 genderTrueLabel = tk.Label(results,text="",bg="white", width=2)
 genderTrueLabel.pack()
@@ -407,17 +405,17 @@ count=1
 for (text, value) in values.items():
     tk.Radiobutton(pluralButtons, text = text, variable = plural, 
                 value = value, indicator = 0,
-                background = "light blue").grid(row=3, column=count)
+                background = "light blue",fg="black").grid(row=3, column=count)
     count+=1
 pluralTrueLabel = tk.Label(results,text="",bg="white", width=2)
 pluralTrueLabel.pack()
 
 pluralButtons.grid_columnconfigure(1, weight=1)
 
-genWord = tk.Button(canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="#262D42", command=getLatinWord)
+genWord = tk.Button(canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
 genWord.pack()
 
-checkWordButton = tk.Button(canvas, text="Check Word", padx=10, pady=5, fg="white", bg="#262D42", command=checkWord)
+checkWordButton = tk.Button(canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
 checkWordButton.pack()
 
 
