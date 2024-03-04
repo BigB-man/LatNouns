@@ -1,14 +1,17 @@
 # Import module 
 import tkinter as tk
+from tkinter import filedialog
 import json
 import os
 import random
+import shutil
+
 # Create the main window
 root = tk.Tk()
 root.title("Latin Noun Tester")
 #root.wm_attributes('-transparentcolor','#ab23ff')
 root.iconbitmap("images/SquareNounDeclension.ico")
-
+initImage = True
 root.geometry("680x380")
 genders=["Fem","Masc","Neut"]
 guessLimit = 1
@@ -73,7 +76,7 @@ def getLatinWord():
     # generatedWord.pack()
     for widget in wordframe.winfo_children():
         widget.destroy()
-    generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
+    generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="white")
     generatedWord.pack()
     # print(wordList)
     # print(chosenWord)
@@ -137,11 +140,11 @@ def checkWord():
    
 
 
-def resize_image(event):
+def resize_image():
 
     global bg_image, bg_image_id
-    window_width = event.width
-    window_height = event.height
+    window_width = root.winfo_width()
+    window_height = root.winfo_height()
 
     # Calculate the scaling factors for width and height
     scale_width = window_width / bg_image_orig.width()
@@ -228,19 +231,12 @@ def incrementWeight():#remember to add edit to declension weight
         json.dump(dataDecs, f, indent=4, ensure_ascii=False)    
 
 
-# Load the image file
-os.chdir('..')
-bg_image_orig = tk.PhotoImage(file="images/pomp.png")
-bg_image = bg_image_orig
-os.chdir('json')
+
 # Create a canvas
 canvas = tk.Canvas(root, bg="#dbfcff")
 canvas.pack(fill="both", expand=True)
 
-# Create a frame to hold widgets
 
-header = tk.Frame(canvas, bg="")
-header.pack(fill='x')
 
 
 
@@ -263,7 +259,37 @@ def resetWeightFunc():
     os.remove(filename)
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
+def UploadAction():
+    os.chdir('..')
+    filename = filedialog.askopenfilename()
+    print('Selected:', filename)
+    file = filename[filename.rindex("/")+1:]
+    print(os.getcwd())
+    shutil.copyfile(filename, 'backgrounds/'+file)
+    os.chdir('json')
+
+def SetBackground():
+    print(os.getcwd())
+    filename = filedialog.askopenfilename(initialdir ="backgrounds")
+    print('Selected:', filename)
+    file = filename[filename.rindex("/")+1:]
+    filename = 'Background.json' 
+    with open(filename, 'r',encoding='utf-8') as k:
+        data = json.load(k)
+    data["background"] = file
+    os.remove("Background.json")
+    with open("Background.json", 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+    setImage()
+
+
         
+
+os.chdir('..')
+photo = tk.PhotoImage(file="images/settings.png")
+os.chdir('json')
+photo = photo.subsample(int(photo.width() / 75), int(photo.height() / 50))
+
 def settingsWindow():
     settingsWindow = tk.Toplevel(root)
     settingsWindow.title("Settings")
@@ -271,8 +297,12 @@ def settingsWindow():
     settingsWindow.grab_set()
     resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, fg="white", bg="dark blue", command=resetWeightFunc)
     resetWeight.pack()
-    # customBackground = tk.Button(settingsWindow, text="Custom Background", padx=10, pady=5, fg="white", bg="#262D42")
-    # customBackground.pack()
+    
+    uploadCustomBackground = tk.Button(settingsWindow, text="Upload Custom Background", padx=10, pady=5, fg="white", bg="#262D42", command=UploadAction)
+    uploadCustomBackground.pack()
+
+    setBackground = tk.Button(settingsWindow, text="Set Background", padx=10, pady=5, fg="white", bg="#262D42", command= SetBackground)
+    setBackground.pack()
 
     LimitFrame = tk.Frame(settingsWindow, pady=10)
     LimitFrame.pack()
@@ -297,18 +327,13 @@ def settingsWindow():
         guessLimit = guess.get()
     submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="dark blue", command=submit)
     submitButton.grid(row=1, column=4)
-
-os.chdir('..')
-photo = tk.PhotoImage(file="images/settings.png")
-os.chdir('json')
-photo = photo.subsample(int(photo.width() / 75), int(photo.height() / 50))
-settingsButton = tk.Button(header,text="Settings",image=photo, command=lambda:settingsWindow())
-settingsButton.pack(side = "right")
+settingsButton = tk.Button(canvas,text="Settings",image=photo, command=lambda:settingsWindow())
+settingsButton.pack(anchor="ne")
 
 # Create a frame to hold widgets
 wordframe = tk.Frame(canvas)
 wordframe.pack()
-generatedWord = tk.Label(wordframe, text="Word🗿", bg ="gray")
+generatedWord = tk.Label(wordframe, text="Word🗿", bg ="white")
 generatedWord.pack()
 # Create a frame to hold widgets
 buttons = tk.Frame(canvas)
@@ -419,13 +444,31 @@ checkWordButton = tk.Button(canvas, text="Check Word", padx=10, pady=5, fg="whit
 checkWordButton.pack()
 
 
+# Load the image file
+def setImage():
+    global bg_image_orig, bg_image,bg_image_id, initImage
+    fileDecs = 'Background.json'
+    with open(fileDecs, 'r',encoding='utf-8') as k:
+        data = json.load(k)
+    os.chdir('..')
+    bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
+    bg_image = bg_image_orig
+    os.chdir('json')
+    if(initImage == False):
+        canvas.delete(bg_image_id)
+    if(initImage == True):
+        initImage = False
+    bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
+    resize_image()
 
+setImage()
 
 # Center and fill the image
-bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
-canvas.bind("<Configure>", resize_image)
-
-root.resizable(0, 0) 
+def resize_imag(event):
+    resize_image()
+# canvas.bind("<Configure>", resize_image)
+canvas.bind("<Configure>", resize_imag)
+#root.resizable(0, 0) 
 
 # Run the Tkinter event loop
 root.mainloop()
