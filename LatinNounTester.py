@@ -201,9 +201,9 @@ def incrementWeight():#remember to add edit to declension weight
     with open(filename, 'r',encoding='utf-8') as k:
         data = json.load(k)
     word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
-    if(data[chosenWord[1]][chosenWord[0]]["weight"] < 10):
+    if(data[chosenWord[1]][chosenWord[0]]["weight"] < 50):
         data[chosenWord[1]][chosenWord[0]]["weight"] +=1
-    if(data["weight"][chosenWord[1]] < 10):
+    if(data["weight"][chosenWord[1]] < 50):
         data["weight"][chosenWord[1]] += 1
     val = set()
     for i in cases:
@@ -212,7 +212,7 @@ def incrementWeight():#remember to add edit to declension weight
                 val.add(i)
                 val.add(j) 
     for k in val:
-        if(data[k] < 10):
+        if(data[k] < 50):
             data[k] +=1
     print(val)
     os.remove(filename)
@@ -224,7 +224,7 @@ def incrementWeight():#remember to add edit to declension weight
     with open(fileDecs, 'r',encoding='utf-8') as k:
         dataDecs = json.load(k)
     
-    if(dataDecs["Declension"+str(chosenWord[2])] < 10):
+    if(dataDecs["Declension"+str(chosenWord[2])] < 50):
         dataDecs["Declension"+str(chosenWord[2])] += 1
     os.remove(fileDecs)
     with open(fileDecs, 'w', encoding='utf-8') as f:
@@ -261,26 +261,44 @@ def resetWeightFunc():
         json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
 def UploadAction():
     os.chdir('..')
-    filename = filedialog.askopenfilename()
-    print('Selected:', filename)
-    file = filename[filename.rindex("/")+1:]
-    print(os.getcwd())
-    shutil.copyfile(filename, 'backgrounds/'+file)
-    os.chdir('json')
+    try:
+        filename = filedialog.askopenfilename(filetypes=[('image files', '.png')])
+        print('Selected:', filename)
+        file = filename[filename.rindex("/")+1:]
+        print(os.getcwd())
+        shutil.copyfile(filename, 'backgrounds/'+file)
+        os.chdir('json')
+    except:
+        os.chdir('json')
+        print("Upload errored this is the current directory:"+os.getcwd)
+        
+    
 
 def SetBackground():
     print(os.getcwd())
-    filename = filedialog.askopenfilename(initialdir ="backgrounds")
+    filename = filedialog.askopenfilename(initialdir ="backgrounds",filetypes=[('image files', '.png')])
     print('Selected:', filename)
     file = filename[filename.rindex("/")+1:]
-    filename = 'Background.json' 
-    with open(filename, 'r',encoding='utf-8') as k:
-        data = json.load(k)
-    data["background"] = file
-    os.remove("Background.json")
-    with open("Background.json", 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
-    setImage()
+    #filename.rindex("/",0,filename.rindex("/"))+1 -- second last "/"
+    os.chdir("..")
+    os.chdir("backgrounds")
+
+    if(os.getcwd().replace("\\","/")==filename[:filename.rindex("/")]):
+        os.chdir("..")
+        os.chdir("json")
+        print("same directory")
+        filename = 'Background.json' 
+        with open(filename, 'r',encoding='utf-8') as k:
+            data = json.load(k)
+        data["background"] = file
+        os.remove("Background.json")
+        with open("Background.json", 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+        setImage()
+    else:
+        print("different directory")
+        os.chdir("..")
+        os.chdir("json")
 
 
         
@@ -298,10 +316,10 @@ def settingsWindow():
     resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, fg="white", bg="dark blue", command=resetWeightFunc)
     resetWeight.pack()
     
-    uploadCustomBackground = tk.Button(settingsWindow, text="Upload Custom Background", padx=10, pady=5, fg="white", bg="#262D42", command=UploadAction)
+    uploadCustomBackground = tk.Button(settingsWindow, text="Upload Custom Background", padx=10, pady=5, fg="white", bg="dark blue", command=UploadAction)
     uploadCustomBackground.pack()
 
-    setBackground = tk.Button(settingsWindow, text="Set Background", padx=10, pady=5, fg="white", bg="#262D42", command= SetBackground)
+    setBackground = tk.Button(settingsWindow, text="Set Background", padx=10, pady=5, fg="white", bg="dark blue", command= SetBackground)
     setBackground.pack()
 
     LimitFrame = tk.Frame(settingsWindow, pady=10)
@@ -333,7 +351,7 @@ settingsButton.pack(anchor="ne")
 # Create a frame to hold widgets
 wordframe = tk.Frame(canvas)
 wordframe.pack()
-generatedWord = tk.Label(wordframe, text="Word🗿", bg ="white")
+generatedWord = tk.Label(wordframe, text="Word", bg ="white")
 generatedWord.pack()
 # Create a frame to hold widgets
 buttons = tk.Frame(canvas)
@@ -435,7 +453,6 @@ for (text, value) in values.items():
 pluralTrueLabel = tk.Label(results,text="",bg="white", width=2)
 pluralTrueLabel.pack()
 
-pluralButtons.grid_columnconfigure(1, weight=1)
 
 genWord = tk.Button(canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
 genWord.pack()
@@ -451,15 +468,18 @@ def setImage():
     with open(fileDecs, 'r',encoding='utf-8') as k:
         data = json.load(k)
     os.chdir('..')
-    bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
-    bg_image = bg_image_orig
-    os.chdir('json')
-    if(initImage == False):
-        canvas.delete(bg_image_id)
-    if(initImage == True):
-        initImage = False
-    bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
-    resize_image()
+    try:
+        bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
+        bg_image = bg_image_orig
+        os.chdir('json')
+        if(initImage == False):
+            canvas.delete(bg_image_id)
+        if(initImage == True):
+            initImage = False
+        bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
+        resize_image()
+    except:
+        os.chdir('json')
 
 setImage()
 
