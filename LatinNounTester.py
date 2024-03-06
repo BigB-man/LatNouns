@@ -353,7 +353,70 @@ def settingsWindow():
         SetBackgroundWin.mainloop()
         
         
-        # print("different directory")
+    def DeleteBackground():
+        DeleteBackgroundWin = tk.Toplevel(root)
+        DeleteBackgroundWin.title("Backgrounds")
+        DeleteBackgroundWin.grab_set()
+        settingsWindow.destroy()
+
+        os.chdir("..")
+        os.chdir("backgrounds")
+        files = os.listdir()
+        backgroundImages = []
+        for i in files:
+            img = tk.PhotoImage(file=i)
+            img=img.subsample(int(img.width() / 300), int(img.height() / 200))
+            backgroundImages.append(img)
+        os.chdir("..")
+        os.chdir("json")
+        
+        container = tk.Frame(DeleteBackgroundWin)
+        container.pack()
+        canvas = tk.Canvas(container)
+        scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        def setImageFile(imgFile):
+            os.chdir("..")
+            os.chdir("backgrounds")
+            os.remove(imgFile)
+            print(imgFile)
+            print("hi")
+            os.chdir("..")
+            os.chdir("json")
+            filename = 'Background.json' 
+            with open(filename, 'r',encoding='utf-8') as k:
+                data = json.load(k)
+            if(data["background"]==imgFile):
+                data["background"] = ""
+            print(data)
+            os.remove("Background.json")
+
+            with open("Background.json", 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
+
+            setImage()
+            DeleteBackgroundWin.destroy()
+
+        for i in range(len(backgroundImages)):
+            tk.Button(scrollable_frame, image=backgroundImages[i],command=partial(setImageFile,files[i])).pack()
+            
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        DeleteBackgroundWin.resizable(0, 0) 
+        DeleteBackgroundWin.mainloop()
         
 
     resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, fg="white", bg="dark blue", command=resetWeightFunc)
@@ -363,6 +426,9 @@ def settingsWindow():
     uploadCustomBackground.pack()
 
     setBackground = tk.Button(settingsWindow, text="Set Background", padx=10, pady=5, fg="white", bg="dark blue", command= SetBackground)
+    setBackground.pack()
+
+    setBackground = tk.Button(settingsWindow, text="Destroy Background", padx=10, pady=5, fg="white", bg="dark blue", command= DeleteBackground)
     setBackground.pack()
 
     LimitFrame = tk.Frame(settingsWindow, pady=10)
@@ -513,18 +579,23 @@ def setImage():
     with open(fileDecs, 'r',encoding='utf-8') as k:
         data = json.load(k)
     os.chdir('..')
-    try:
-        bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
-        bg_image = bg_image_orig
+    if(data["background"] ==""):
+        print("hie")
+        canvas.delete("img")
         os.chdir('json')
-        if(initImage == False):
-            canvas.delete(bg_image_id)
-        if(initImage == True):
-            initImage = False
-        bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center")
-        resize_image()
-    except:
-        os.chdir('json')
+    else:    
+        try:
+            bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
+            bg_image = bg_image_orig
+            os.chdir('json')
+            if(initImage == False):
+                canvas.delete(bg_image_id)
+            if(initImage == True):
+                initImage = False
+            bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center",tag='img')
+            resize_image()
+        except:
+            os.chdir('json')
 
 setImage()
 
