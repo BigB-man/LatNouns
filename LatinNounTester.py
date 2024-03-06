@@ -5,6 +5,7 @@ import json
 import os
 import random
 import shutil
+from functools import partial
 
 # Create the main window
 root = tk.Tk()
@@ -274,31 +275,7 @@ def UploadAction():
         
     
 
-def SetBackground():
-    print(os.getcwd())
-    filename = filedialog.askopenfilename(initialdir ="backgrounds",filetypes=[('image files', '.png')])
-    print('Selected:', filename)
-    file = filename[filename.rindex("/")+1:]
-    #filename.rindex("/",0,filename.rindex("/"))+1 -- second last "/"
-    os.chdir("..")
-    os.chdir("backgrounds")
 
-    if(os.getcwd().replace("\\","/")==filename[:filename.rindex("/")]):
-        os.chdir("..")
-        os.chdir("json")
-        print("same directory")
-        filename = 'Background.json' 
-        with open(filename, 'r',encoding='utf-8') as k:
-            data = json.load(k)
-        data["background"] = file
-        os.remove("Background.json")
-        with open("Background.json", 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
-        setImage()
-    else:
-        print("different directory")
-        os.chdir("..")
-        os.chdir("json")
 
 
         
@@ -308,11 +285,77 @@ photo = tk.PhotoImage(file="images/settings.png")
 os.chdir('json')
 photo = photo.subsample(int(photo.width() / 75), int(photo.height() / 50))
 
+
+
 def settingsWindow():
     settingsWindow = tk.Toplevel(root)
     settingsWindow.title("Settings")
     settingsWindow.geometry("280x280")
     settingsWindow.grab_set()
+    
+    def SetBackground():
+        SetBackgroundWin = tk.Toplevel(root)
+        SetBackgroundWin.title("Backgrounds")
+        SetBackgroundWin.grab_set()
+        settingsWindow.destroy()
+
+        os.chdir("..")
+        os.chdir("backgrounds")
+        files = os.listdir()
+        backgroundImages = []
+        for i in files:
+            img = tk.PhotoImage(file=i)
+            img=img.subsample(int(img.width() / 300), int(img.height() / 200))
+            backgroundImages.append(img)
+        os.chdir("..")
+        os.chdir("json")
+        
+        container = tk.Frame(SetBackgroundWin)
+        container.pack()
+        canvas = tk.Canvas(container)
+        scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        def setImageFile(imgFile):
+            print(imgFile)
+            print("hi")
+            filename = 'Background.json' 
+            with open(filename, 'r',encoding='utf-8') as k:
+                data = json.load(k)
+            data["background"] = imgFile
+            print(data)
+            os.remove("Background.json")
+
+            with open("Background.json", 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
+
+            setImage()
+            SetBackgroundWin.destroy()
+
+        for i in range(len(backgroundImages)):
+            tk.Button(scrollable_frame, image=backgroundImages[i],command=partial(setImageFile,files[i])).pack()
+            
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        SetBackgroundWin.resizable(0, 0) 
+        SetBackgroundWin.mainloop()
+        
+        
+        # print("different directory")
+        
+
     resetWeight = tk.Button(settingsWindow, text="Reset Weight", padx=10, fg="white", bg="dark blue", command=resetWeightFunc)
     resetWeight.pack()
     
@@ -345,6 +388,8 @@ def settingsWindow():
         guessLimit = guess.get()
     submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="dark blue", command=submit)
     submitButton.grid(row=1, column=4)
+
+    
 settingsButton = tk.Button(canvas,text="Settings",image=photo, command=lambda:settingsWindow())
 settingsButton.pack(anchor="ne")
 
