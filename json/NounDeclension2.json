@@ -1,16 +1,16 @@
 {
-    "nom": 7,
-    "acc": 7,
+    "nom": 8,
+    "acc": 8,
     "gen": 7,
     "dat": 7,
     "abl": 7,
     "sing": 7,
-    "plur": 7,
+    "plur": 8,
     "gender": 7,
     "weight": {
         "Fem": 7,
         "Masc": 7,
-        "Neut": 7
+        "Neut": 8
     },
     "Fem": {},
     "Masc": {
@@ -1214,7 +1214,7 @@
                 "plur": "ōppĭdīs"
             },
             "Def": "idk",
-            "weight": 7
+            "weight": 8
         },
         "prāemĭŭm": {
             "nom": {
