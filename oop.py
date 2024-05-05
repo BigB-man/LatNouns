@@ -12,8 +12,9 @@ class MainApp(tk.Tk):
 
     def __init__(self):    
         tk.Tk.__init__(self)
-        self.frame = Window(self)
+        self.frame = HomePage(self)
         self.frame.pack()
+        self.geometry("680x380")
 
     def change(self, frame):
         for widget in self.winfo_children():
@@ -222,9 +223,6 @@ class Window(tk.Frame):
                     guessLimit = guess.get()
                 submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="dark blue", command=submit)
                 submitButton.grid(row=1, column=4)
-
-
-            self.master.geometry("680x380")
             
             canvas = tk.Canvas(self.master, bg="#dbfcff")
             canvas.pack(fill="both", expand=True)
@@ -293,14 +291,13 @@ class Window(tk.Frame):
 class GuessNoun(Window):
         def __init__(self, master, **kwargs):
             super().__init__(master, **kwargs)
-            pizza = tk.Label(self.master.canvas, text="chez")
-            pizza.pack()
             genders=["Fem","Masc","Neut"]
             guessLimit = 1
             global currentGuesses
             currentGuesses = 0
             cases= ["nom","acc","gen","dat","abl"]
             pluralOptions = ["sing","plur"]
+            master.title("Latin Noun Tester")
 
             def decrementWeight():#remember to add edit to declension weight
                 filename = 'json/NounDeclension'+str(chosenWord[2])+'.json' 
@@ -489,12 +486,12 @@ class GuessNoun(Window):
                     checkWordButton.pack_forget()
 
             # Create a frame to hold widgets
-            wordframe = tk.Frame(self.master.canvas)
+            wordframe = tk.Frame(master.canvas)
             wordframe.pack()
             generatedWord = tk.Label(wordframe, text="Word", bg ="white")
             generatedWord.pack()
             # Create a frame to hold widgets
-            buttons = tk.Frame(self.master.canvas)
+            buttons = tk.Frame(master.canvas)
             buttons.pack()
             choices = tk.Frame(buttons)
             choices.grid(row=0,column=1)
@@ -600,6 +597,13 @@ class GuessNoun(Window):
             checkWordButton = tk.Button(self.master.canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
             checkWordButton.pack()
                     
+class HomePage(Window):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+        master.title("Home Page")
+        print(str(master.winfo_height())+"HHI")
+        titleLabel = tk.Label(master.canvas, text="Welcome to the Latin Noun Tester",font=("Arial", 25))
+        titleLabel.pack(anchor="center")
 
            
         
