@@ -8,41 +8,26 @@ import shutil
 from functools import partial
 initImage = True
 
-class Home(tk.Frame):
+class MainApp(tk.Tk):
 
-    def __init__(self, master=None):    
-        tk.Frame.__init__(self, master)
-            
-        self.master = master
-        self.master.title( "Latin Noun Tester")
+    def __init__(self):    
+        tk.Tk.__init__(self)
+        self.frame = Window(self)
+        self.frame.pack()
 
-        self.submit = ttk.Button(self.master, text='SUBMIT', command=self.click_submit_button)
-        self.submit.grid(row=0, column=2, padx=20, pady=20)
-        self.submit = ttk.Button(self.master, text='SUIT', command=self.GuessNounButton)
-        self.submit.grid(row=0, column=1, padx=20, pady=20)
-        
+    def change(self, frame):
+        for widget in self.winfo_children():
+            widget.destroy()
+        self.frame = frame(self)
+        self.frame.pack() # make new frame
 
-        
-    
-    def click_submit_button(self):
-
-        self.submit_pop_up = Window(self.master)
-        self.master.withdraw()
-
-        print('New PopUp')
-    def GuessNounButton(self):
-    
-      self.submit_pop_up = GuessNoun(self.master)
-      self.master.withdraw()
-    
-      print('New PopUp')
     
 
-class Window(tk.Toplevel):
+class Window(tk.Frame):
 
-        def __init__(self, master):
+        def __init__(self, master=None, **kwargs):
 
-            tk.Toplevel.__init__(self, master)
+            tk.Frame.__init__(self, master, **kwargs)
 
             self.master = master
 
@@ -77,13 +62,13 @@ class Window(tk.Toplevel):
                     print("Upload errored this is the current directory:"+os.getcwd)
 
             def settingsWindow():
-                settingsWindow = tk.Toplevel(root)
+                settingsWindow = tk.Toplevel(self)
                 settingsWindow.title("Settings")
                 settingsWindow.geometry("280x280")
                 settingsWindow.grab_set()
                 
                 def SetBackground():
-                    SetBackgroundWin = tk.Toplevel(root)
+                    SetBackgroundWin = tk.Toplevel(self)
                     SetBackgroundWin.title("Backgrounds")
                     SetBackgroundWin.grab_set()
                     settingsWindow.destroy()
@@ -141,7 +126,7 @@ class Window(tk.Toplevel):
                     
                     
                 def DeleteBackground():
-                    DeleteBackgroundWin = tk.Toplevel(root)
+                    DeleteBackgroundWin = tk.Toplevel(self)
                     DeleteBackgroundWin.title("Backgrounds")
                     DeleteBackgroundWin.grab_set()
                     settingsWindow.destroy()
@@ -218,7 +203,7 @@ class Window(tk.Toplevel):
                 LimitFrame.pack()
                 LimitLabel = tk.Label(LimitFrame, text="Guess Limit:")
                 LimitLabel.grid(row=1, column=0)
-                guess = tk.IntVar(root, "1")
+                guess = tk.IntVar(self, "1")
                 # Dictionary to create multiple buttons
                 values = {"1" : 1,
                         "2" : 2,
@@ -239,19 +224,18 @@ class Window(tk.Toplevel):
                 submitButton.grid(row=1, column=4)
 
 
-            self.geometry("680x380")
+            self.master.geometry("680x380")
             
-            canvas = tk.Canvas(self, bg="#dbfcff")
+            canvas = tk.Canvas(self.master, bg="#dbfcff")
             canvas.pack(fill="both", expand=True)
             Header = tk.Frame(canvas, bg="")
             settingsButton = tk.Button(canvas ,text="Settings",command=lambda:settingsWindow())
             settingsButton.pack(fill="x", side="right", anchor="ne")
-            def OpenHome():
-                self.master.deiconify()
-                self.withdraw()
-            closeBu = tk.Button(canvas ,text="Home",command=OpenHome)
+            def OpenNounTester():
+                self.master.change(GuessNoun)
+            closeBu = tk.Button(canvas ,text="Noun Tester",command=OpenNounTester)
             closeBu.pack(fill="x", side="left", anchor="nw")
-            self.canvas = canvas
+            self.master.canvas = canvas
 
             
             def setImage():
@@ -277,8 +261,8 @@ class Window(tk.Toplevel):
             def resize_image():
 
                 global bg_image, bg_image_id
-                window_width = self.winfo_width()
-                window_height = self.winfo_height()
+                window_width = self.master.winfo_width()
+                window_height = self.master.winfo_height()
                 print(window_height)
 
                 # Calculate the scaling factors for width and height
@@ -301,16 +285,15 @@ class Window(tk.Toplevel):
                 resize_image()
             # canvas.bind("<Configure>", resize_image)
             canvas.bind("<Configure>", resize_imag)
-            self.canvas = canvas
             setImage()
            
 
 
 
 class GuessNoun(Window):
-        def __init__(self, master):
-            super().__init__(master)
-            pizza = tk.Label(self.canvas, text="chez")
+        def __init__(self, master, **kwargs):
+            super().__init__(master, **kwargs)
+            pizza = tk.Label(self.master.canvas, text="chez")
             pizza.pack()
             genders=["Fem","Masc","Neut"]
             guessLimit = 1
@@ -506,12 +489,12 @@ class GuessNoun(Window):
                     checkWordButton.pack_forget()
 
             # Create a frame to hold widgets
-            wordframe = tk.Frame(self.canvas)
+            wordframe = tk.Frame(self.master.canvas)
             wordframe.pack()
             generatedWord = tk.Label(wordframe, text="Word", bg ="white")
             generatedWord.pack()
             # Create a frame to hold widgets
-            buttons = tk.Frame(self.canvas)
+            buttons = tk.Frame(self.master.canvas)
             buttons.pack()
             choices = tk.Frame(buttons)
             choices.grid(row=0,column=1)
@@ -523,7 +506,7 @@ class GuessNoun(Window):
             #Declension Choices
             DeclensionText = tk.Label(labels, text = "Declension:")
             DeclensionText.pack()
-            declension = tk.StringVar(root, "1")
+            declension = tk.StringVar(self, "1")
             declensionButtons = tk.Frame(choices, bg="")
             declensionButtons.pack()
             # Dictionary to create multiple buttons
@@ -549,7 +532,7 @@ class GuessNoun(Window):
             caseButtons.pack()
             caseText = tk.Label(labels, text = "Case:")
             caseText.pack()
-            case = tk.StringVar(root, "1")
+            case = tk.StringVar(self, "1")
             # Dictionary to create multiple buttons
             values = {"Nominative" : "nom",
                     "Accusative" : "acc",
@@ -572,7 +555,7 @@ class GuessNoun(Window):
             genderButtons.pack()
             GenderText = tk.Label(labels, text = "Gender:")
             GenderText.pack()
-            gender = tk.StringVar(root, "1")
+            gender = tk.StringVar(self, "1")
             
             # Dictionary to create multiple buttons
             values = {"Feminine" : "Fem",
@@ -592,7 +575,7 @@ class GuessNoun(Window):
             #Plural words
             PluralText = tk.Label(labels, text = "Plurality:")
             PluralText.pack()
-            plural = tk.StringVar(root, "1")
+            plural = tk.StringVar(self, "1")
             pluralButtons = tk.Frame(choices, bg="")
             pluralButtons.pack()
             # Dictionary to create multiple buttons
@@ -611,10 +594,10 @@ class GuessNoun(Window):
             pluralTrueLabel.pack()
 
 
-            genWord = tk.Button(self.canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
+            genWord = tk.Button(self.master.canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
             genWord.pack()
 
-            checkWordButton = tk.Button(self.canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
+            checkWordButton = tk.Button(self.master.canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
             checkWordButton.pack()
                     
 
@@ -624,7 +607,5 @@ class GuessNoun(Window):
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = Home(root)
-    #app.pack()
-    root.mainloop()
+    app = MainApp()
+    app.mainloop()
