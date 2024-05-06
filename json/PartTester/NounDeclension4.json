@@ -1,0 +1,92 @@
+{
+    "nom": 7,
+    "acc": 7,
+    "gen": 7,
+    "dat": 7,
+    "abl": 7,
+    "sing": 7,
+    "plur": 7,
+    "gender": 7,
+    "weight":{
+        "Fem":7,
+        "Masc":7,
+        "Neut":7
+    },
+    "Masc": {
+        "pōrtŭs": {
+            "nom": {
+                "sing": "pōrtŭs",
+                "plur": "pōrtūs"
+            },
+            "acc": {
+                "sing": "pōrtŭm",
+                "plur": "pōrtūs"
+            },
+            "gen": {
+                "sing": "pōrtūs",
+                "plur": "pōrtŭŭm"
+            },
+            "dat": {
+                "sing": "pōrtŭī",
+                "plur": "pōrtĭbŭs"
+            },
+            "abl": {
+                "sing": "pōrtū",
+                "plur": "pōrtĭbŭs"
+            },
+            "Def": "idk",
+            "weight": 7
+        },
+        "strĕpĭtŭs": {
+            "nom": {
+                "sing": "strĕpĭtŭs",
+                "plur": "strĕpĭtūs"
+            },
+            "acc": {
+                "sing": "strĕpĭtŭm",
+                "plur": "strĕpĭtūs"
+            },
+            "gen": {
+                "sing": "strĕpĭtūs",
+                "plur": "strĕpĭtŭŭm"
+            },
+            "dat": {
+                "sing": "strĕpĭtŭī",
+                "plur": "strĕpĭtĭbŭs"
+            },
+            "abl": {
+                "sing": "strĕpĭtū",
+                "plur": "strĕpĭtĭbŭs"
+            },
+            "Def": "idk",
+            "weight": 7
+        }
+    },
+    "Neut": {},
+    "Fem": {
+        "dŏmŭs": {
+            "nom": {
+                "sing": "dŏmŭs",
+                "plur": "dŏmŭs"
+            },
+            "acc": {
+                "sing": "dŏmŭm",
+                "plur": "dŏmōs"
+            },
+            "gen": {
+                "sing": "dŏmūs",
+                "plur": "dŏmōrŭm"
+            },
+            "dat": {
+                "sing": "dŏmŭī",
+                "plur": "dŏmĭbŭs"
+            },
+            "abl": {
+                "sing": "(dŏmū), dŏmō",
+                "plur": "dŏmĭbŭs"
+            },
+            "Def": "idk",
+            "weight": 7
+        }
+    }
+}

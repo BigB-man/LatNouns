@@ -10,18 +10,28 @@ from functools import partial
 # Create the main window
 root = tk.Tk()
 root.title("Latin Noun Tester")
-#root.wm_attributes('-transparentcolor','#ab23ff')
-root.iconbitmap("images/SquareNounDeclension.ico")
+try:
+    os.chdir("LatNouns")
+except:
+    print("hola senior, it loaded the directory right")
+
+root.iconbitmap("images/SquareNounDeclension.ico") #icon of app
 initImage = True
-root.geometry("680x380")
+
+root.geometry("680x380") #default size of app
+
+#list of each type of attribute nouns can have, exculding declension due to its numerical nature
 genders=["Fem","Masc","Neut"]
-guessLimit = 1
-currentGuesses = 0
 cases= ["nom","acc","gen","dat","abl"]
 pluralOptions = ["sing","plur"]
+
+#variables to control amount of guesses
+guessLimit = 1
+currentGuesses = 0
 print(os. getcwd())
-os.chdir("json")
-# Create object 
+os.chdir("json")#move to json directory as it is where the data for nouns is stored
+
+# Logic to get new latin word
 def getLatinWord():
     # Get the directory of the current script
     
@@ -29,7 +39,7 @@ def getLatinWord():
 
 
     key=1
-    wordList=[]
+    wordList=[]#will be a 2d list to contain all the words
     wordCount = 0
     
     global chosenWord,chosenCase,chosenPlural, word
@@ -38,20 +48,23 @@ def getLatinWord():
     with open(fileDecs, 'r',encoding='utf-8') as k:
         dataDecs = json.load(k)
 
-    while key<6:
+    while key<6:#adds words to the word list, depending on the weighting value of themselves, their declension, and their declension's gender 
         filename = 'NounDeclension'+str(key)+'.json'
         with open(filename, 'r',encoding='utf-8') as k:
             data = json.load(k)
         for k in range(3):
             for i in data[genders[k]]:
                 for j in range(data[genders[k]][i]["weight"]*dataDecs["Declension"+str(key)]*data["weight"][genders[k]]):
+                    #adds the word and its identifying information so it's data can be pulled.
                     wordList.append([])
                     wordList[wordCount].append(i)
                     wordList[wordCount].append(genders[k])
                     wordList[wordCount].append(key)
                     wordCount+=1
         key+=1
-    chosenWord=random.choice(wordList)
+    chosenWord=random.choice(wordList)#randomly choses word
+
+    #adds each case to a list based on their declensions' respective case weighting, chooses randomly a case from the list
     caseNoun =[]
     cases= ["nom","acc","gen","dat","abl"]
     for l in range(len(cases)):
@@ -59,53 +72,54 @@ def getLatinWord():
             caseNoun.append(cases[l])
     chosenCase =random.choice(caseNoun)
 
+    #adds each plurality option to a list based on their declensions' respective plurality weighting, chooses randomly an option from the list
     plurality =[]
-    
     for n in range(2):
         for o in range(data[pluralOptions[n]]):
             plurality.append(pluralOptions[n])
     chosenPlural =random.choice(plurality)
 
+    #loads the chosen word's declension
     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
     with open(filename, 'r',encoding='utf-8') as k:
             data = json.load(k)
-
-    print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
-    
-    # generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
-    # generatedWord = tk.Text(wordframe)
-    # generatedWord.pack()
+  
+    #Displays the chosen Word
     for widget in wordframe.winfo_children():
         widget.destroy()
     generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="white")
     generatedWord.pack()
-    # print(wordList)
-    # print(chosenWord)
+
+    #adds the chosen word to global variable word
     word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
+    #resets the right and wrong answer display
     declensionTrueLabel.config(text="",bg="white")
     caseTrueLabel.config(text="",bg="white")
     genderTrueLabel.config(text="", bg="white")
     pluralTrueLabel.config(text="",bg="white")
     checkWordButton.pack()
 
+
+# Logic to check word
 def checkWord():
     filename = 'NounDeclension'+str(chosenWord[2])+'.json'
     with open(filename, 'r',encoding='utf-8') as k:
             data = json.load(k)
-    if(gender.get() != chosenWord[1]):
+
+    if(gender.get() != chosenWord[1]):# if the gender answered is wrong increment weight of attributes
          print("wrong")
          incrementWeight()
-    elif(declension.get()!=str(chosenWord[2])):
+    elif(declension.get()!=str(chosenWord[2])):# if the declension answered is wrong increment weight of attributes
         print("wrong")
         incrementWeight()
-    elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+    elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]): #if the word from attributes chosen is correct to the displayed word then return correct.
          print("true")
          decrementWeight()
-    else:
+    else: #if in doubt, they got it wrong so increment
          print("wrong")
          incrementWeight()
-    print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
-    print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
+    
+    #right or wrong display
     global genderTrue, caseTrue,pluralTrue,declensionTrue, currentGuesses
     genderTrue = "❌"
     genderColor = "red"
@@ -121,6 +135,7 @@ def checkWord():
     if(declension.get()==str(chosenWord[2])):
         declensionTrue ="✓"
         declensionColor = "green"
+    #dev note: check if this makes flase wrongs
     if(data[chosenWord[1]][chosenWord[0]][case.get()][chosenPlural] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
         caseTrue = "✓"
         caseColor = "green"
@@ -141,7 +156,7 @@ def checkWord():
    
 
 
-def resize_image():
+def resize_image():#scales & centres image
 
     global bg_image, bg_image_id
     window_width = root.winfo_width()
@@ -181,7 +196,7 @@ def decrementWeight():#remember to add edit to declension weight
     for k in val:
         if(data[k] > 1):
             data[k] -=1
-    print(val)
+    #print(val)
     os.remove(filename)
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
@@ -215,7 +230,7 @@ def incrementWeight():#remember to add edit to declension weight
     for k in val:
         if(data[k] < 50):
             data[k] +=1
-    print(val)
+    #print(val)
     os.remove(filename)
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
@@ -234,8 +249,9 @@ def incrementWeight():#remember to add edit to declension weight
 
 
 # Create a canvas
-canvas = tk.Canvas(root, bg="#dbfcff")
+canvas = tk.Canvas(root)
 canvas.pack(fill="both", expand=True)
+
 
 
 
@@ -274,11 +290,7 @@ def UploadAction():
         print("Upload errored this is the current directory:"+os.getcwd)
         
     
-
-
-
-
-        
+      
 
 os.chdir('..')
 photo = tk.PhotoImage(file="images/settings.png")
@@ -464,6 +476,7 @@ wordframe = tk.Frame(canvas)
 wordframe.pack()
 generatedWord = tk.Label(wordframe, text="Word", bg ="white")
 generatedWord.pack()
+
 # Create a frame to hold widgets
 buttons = tk.Frame(canvas)
 buttons.pack()
@@ -565,10 +578,10 @@ pluralTrueLabel = tk.Label(results,text="",bg="white", width=2)
 pluralTrueLabel.pack()
 
 
-genWord = tk.Button(canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
+genWord = tk.Button(canvas, text="Generate New Word", padx=10, pady=5, command=getLatinWord)
 genWord.pack()
 
-checkWordButton = tk.Button(canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
+checkWordButton = tk.Button(canvas, text="Check Word", padx=10, pady=5, command=checkWord)
 checkWordButton.pack()
 
 
