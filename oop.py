@@ -677,21 +677,25 @@ class GuessPart(Window):
                 os.remove(fileDecs)
                 with open(fileDecs, 'w', encoding='utf-8') as f:
                     json.dump(dataDecs, f, indent=4, ensure_ascii=False)    
+            
+            def genLatinWord():
+                # Get the directory of the current script
                 
-            def getLatinWord():
+                #print(script_directory)
+
 
                 key=1
                 wordList=[]
                 wordCount = 0
                 
-                global chosenWord,chosenCase,chosenPlural, word
+                
 
-                fileDecs = 'json/PartTester/NounDeclensions.json'
+                fileDecs = 'json/NounDeclensions.json'
                 with open(fileDecs, 'r',encoding='utf-8') as k:
                     dataDecs = json.load(k)
 
                 while key<6:
-                    filename = 'json/PartTester/NounDeclension'+str(key)+'.json'
+                    filename = 'json/NounDeclension'+str(key)+'.json'
                     with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
                     for k in range(3):
@@ -703,43 +707,48 @@ class GuessPart(Window):
                                 wordList[wordCount].append(key)
                                 wordCount+=1
                     key+=1
-                chosenWord=random.choice(wordList)
+                ranChosenWord=random.choice(wordList)
                 caseNoun =[]
                 cases= ["nom","acc","gen","dat","abl"]
                 for l in range(len(cases)):
                     for m in range(data[cases[l]]):
                         caseNoun.append(cases[l])
-                chosenCase =random.choice(caseNoun)
+                ranChosenCase =random.choice(caseNoun)
 
                 plurality =[]
                 
                 for n in range(2):
                     for o in range(data[pluralOptions[n]]):
                         plurality.append(pluralOptions[n])
-                chosenPlural =random.choice(plurality)
+                ranChosenPlural =random.choice(plurality)
 
-                filename = 'json/PartTester/NounDeclension'+str(chosenWord[2])+'.json'
+                filename = 'json/NounDeclension'+str(ranChosenWord[2])+'.json'
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
 
-                print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
+                print(data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural])
                 
                 # generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
                 # generatedWord = tk.Text(wordframe)
                 # generatedWord.pack()
+                
+                ranWord = data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural]
+                print(key)
+                return [ranWord,ranChosenWord,ranChosenCase,ranChosenPlural]
+            def getLatinWord():
+                global word, chosenPlural, chosenCase, chosenWord
+                output = genLatinWord()
+                print(output)
+                word = output[0]
+                chosenWord = output[1]
+                chosenCase = output[2]
+                chosenPlural = output[3]
                 for widget in wordframe.winfo_children():
                     widget.destroy()
                 generatedWord = tk.Label(wordframe, text=chosenWord[1]+", "+chosenCase+", "+chosenPlural, bg ="white")
                 generatedWord.pack()
-                # print(wordList)
-                # print(chosenWord)
-                word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
-                declensionTrueLabel.config(text="",bg="white")
-                caseTrueLabel.config(text="",bg="white")
-                genderTrueLabel.config(text="", bg="white")
-                pluralTrueLabel.config(text="",bg="white")
-                checkWordButton.pack()
-                print(key)
+                for widget in choices.winfo_children():
+                    widget.config(text=genLatinWord()[0])
 
             def checkWord():
                 filename = 'json/PartTester/NounDeclension'+str(chosenWord[2])+'.json'
@@ -798,26 +807,25 @@ class GuessPart(Window):
             generatedWord = tk.Label(wordframe, text="Word", bg ="white")
             generatedWord.pack()
             # Create a frame to hold widgets
-            choices = tk.Frame(master.canvas)
+            choices = tk.Frame(master.canvas, bg="")
             choices.pack(fill="x")
             declension = tk.StringVar(self, "1")
-            declensionButtons = tk.Frame(choices, bg="")
-            declensionButtons.pack()
             # Dictionary to create multiple buttons
             for i in range(6):
-                tk.Button(declensionButtons, text = "obunga"+str(i), background = "light blue",fg="black").pack(side = "bottom")
+                tk.Button(choices, text = "obunga"+str(i), background = "light blue",fg="black").pack(side = "bottom")
             #Plural words
             plural = tk.StringVar(self, "1")
-            pluralButtons = tk.Frame(choices, bg="")
-            pluralButtons.pack(side="right")
+
             # Dictionary to create multiple buttons
             values = {"Singular" : "sing",
                     "Plural" : "plur"}
             
             # Loop is used to create multiple Radiobuttons
             # rather than creating each button separately
+
+            # genLatinWord()[0]
             for (text, value) in values.items():
-                tk.Button(pluralButtons, text = text, background = "light blue",fg="black").pack(side = "bottom")
+                tk.Button(choices, text = text, background = "light blue",fg="black").pack(side = "bottom")
                 
 
             genWord = tk.Button(self.master.canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
