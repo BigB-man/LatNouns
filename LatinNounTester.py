@@ -295,7 +295,6 @@ def UploadAction():
 os.chdir('..')
 photo = tk.PhotoImage(file="images/settings.png")
 os.chdir('json')
-photo = photo.subsample(int(photo.width() / 75), int(photo.height() / 50))
 
 
 

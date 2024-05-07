@@ -15,6 +15,7 @@ class MainApp(tk.Tk):
         self.frame = HomePage(self)
         self.frame.pack()
         self.geometry("680x380")
+        
 
     def change(self, frame):
         for widget in self.winfo_children():
@@ -227,14 +228,17 @@ class Window(tk.Frame):
             canvas = tk.Canvas(self.master, bg="#dbfcff")
             canvas.pack(fill="both", expand=True)
             Header = tk.Frame(canvas, bg="")
-            settingsButton = tk.Button(canvas ,text="Settings",command=lambda:settingsWindow())
-            settingsButton.pack(fill="x", side="right", anchor="ne")
+
+            photo = tk.PhotoImage(file="images/settings.png")
+
+            settingsButton = tk.Button(canvas,text="Settings", command=lambda:settingsWindow())
+            settingsButton.pack(side="right", anchor="ne")
             def OpenPage(x):
                 self.master.change(x)
             NounTestButton = tk.Button(canvas ,text="Noun Tester",command=lambda:OpenPage(GuessNoun))
-            NounTestButton.pack(fill="x", side="left", anchor="nw")
+            NounTestButton.pack(side="left", anchor="nw")
             PartTestButton = tk.Button(canvas ,text="Part Tester",command=lambda:OpenPage(GuessPart))
-            PartTestButton.pack(fill="x", side="left", anchor="nw")
+            PartTestButton.pack(anchor="nw")
             self.master.canvas = canvas
 
             
@@ -807,25 +811,15 @@ class GuessPart(Window):
             generatedWord = tk.Label(wordframe, text="Word", bg ="white")
             generatedWord.pack()
             # Create a frame to hold widgets
+
             choices = tk.Frame(master.canvas, bg="")
-            choices.pack(fill="x")
-            declension = tk.StringVar(self, "1")
-            # Dictionary to create multiple buttons
-            for i in range(6):
-                tk.Button(choices, text = "obunga"+str(i), background = "light blue",fg="black").pack(side = "bottom")
-            #Plural words
-            plural = tk.StringVar(self, "1")
+            choices.pack()
 
-            # Dictionary to create multiple buttons
-            values = {"Singular" : "sing",
-                    "Plural" : "plur"}
-            
-            # Loop is used to create multiple Radiobuttons
-            # rather than creating each button separately
+            for i in range(3):
+                tk.Button(choices, text = "obunga"+str(i), background = "light blue",fg="black").grid(column=0, row=i)
+            for i in range(3,6):
+                tk.Button(choices, text = "obunga"+str(i), background = "light blue",fg="black").grid(column=1, row=(i-3))
 
-            # genLatinWord()[0]
-            for (text, value) in values.items():
-                tk.Button(choices, text = text, background = "light blue",fg="black").pack(side = "bottom")
                 
 
             genWord = tk.Button(self.master.canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
@@ -839,7 +833,7 @@ class HomePage(Window):
         master.title("Home Page")
         print(str(master.winfo_height())+"HHI")
         titleLabel = tk.Label(master.canvas, text="Welcome to the Latin Noun Tester",font=("Arial", 25))
-        titleLabel.pack(anchor="center")
+        titleLabel.pack(anchor="center", expand=True)
 
            
         
