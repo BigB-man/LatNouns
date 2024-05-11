@@ -788,16 +788,24 @@ class GuessPart(Window):
                 filename = 'json/NounDeclension'+str(selecWord[1][2])+'.json'
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
+                for i in choices.grid_slaves():
+                    i.grid_forget()
                 try:
                     if(selecWord[0]==data[chosenGender][selecWord[1][0]][chosenCase][chosenPlural]):
                         print("true")
                         decrementWeight()
+                        titleLabel = tk.Label(choices, text="Right",font=("Arial", 25))
+                        titleLabel.grid()
                     else:
                         print("wrong")
                         incrementWeight()
+                        titleLabel = tk.Label(choices, text="Wrong",font=("Arial", 25))
+                        titleLabel.grid()
                 except:
                     print("wrong")
                     incrementWeight()
+                    titleLabel = tk.Label(choices, text="Wrong",font=("Arial", 25))
+                    titleLabel.grid()
                 
             # Create a frame to hold widgets
             wordframe = tk.Frame(master.canvas)
