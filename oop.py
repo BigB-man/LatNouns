@@ -730,15 +730,16 @@ class GuessPart(Window):
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
 
-                print(data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural])
+                # print(data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural])
                 
                 # generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
                 # generatedWord = tk.Text(wordframe)
                 # generatedWord.pack()
                 
                 ranWord = data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural]
-                print(key)
+                # print(key)
                 return [ranWord,ranChosenWord,ranChosenCase,ranChosenPlural]
+                
             def getLatinWord():
                 global word, chosenPlural, chosenCase, chosenWord
                 output = genLatinWord()
@@ -751,60 +752,32 @@ class GuessPart(Window):
                     widget.destroy()
                 generatedWord = tk.Label(wordframe, text=chosenWord[1]+", "+chosenCase+", "+chosenPlural, bg ="white")
                 generatedWord.pack()
-                for widget in choices.winfo_children():
-                    widget.config(text=genLatinWord()[0])
+                wordChoice = []
 
-            def checkWord():
-                filename = 'json/PartTester/NounDeclension'+str(chosenWord[2])+'.json'
-                with open(filename, 'r',encoding='utf-8') as k:
-                        data = json.load(k)
-                if(gender.get() != chosenWord[1]):
-                    print("wrong")
-                    incrementWeight()
-                elif(declension.get()!=str(chosenWord[2])):
-                    print("wrong")
-                    incrementWeight()
-                elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+                for i in range(6):
+                    # wordChoice.append(word)
+                    wordChoice.append(genLatinWord()[0])
+                wordChoice[random.randrange(0, 6, 1)] = word
+                print("answer:"+word)
+
+
+                for i in choices.grid_slaves():
+                    i.grid_forget()
+                for i in range(3):
+                    tk.Button(choices, text = wordChoice[i], background = "light blue",fg="black", width= 20, command=partial(checkWord,wordChoice[i])).grid(column=0, row=i)
+                for i in range(3,6):
+                    tk.Button(choices, text = wordChoice[i], background = "light blue",fg="black", width=20, command=partial(checkWord,wordChoice[i])).grid(column=1, row=(i-3))
+
+            def checkWord(selecWord):
+                print(word)
+                print(selecWord)
+                if(word == selecWord):
                     print("true")
                     decrementWeight()
                 else:
                     print("wrong")
                     incrementWeight()
-                print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
-                print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
-                global genderTrue, caseTrue,pluralTrue,declensionTrue, currentGuesses
-                genderTrue = "❌"
-                genderColor = "red"
-                caseTrue = "❌"
-                caseColor = "red"
-                pluralTrue = "❌"
-                pluralColor = "red"
-                declensionTrue = "❌"
-                declensionColor = "red"
-                if(gender.get() == chosenWord[1]):
-                    genderTrue = "✓"
-                    genderColor = "green"
-                if(declension.get()==str(chosenWord[2])):
-                    declensionTrue ="✓"
-                    declensionColor = "green"
-                if(data[chosenWord[1]][chosenWord[0]][case.get()][chosenPlural] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-                    caseTrue = "✓"
-                    caseColor = "green"
-                if(data[chosenWord[1]][chosenWord[0]][chosenCase][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-                    pluralTrue = "✓"
-                    pluralColor = "green"
-                declensionTrueLabel.config(text=declensionTrue,bg=declensionColor)
-                caseTrueLabel.config(text=caseTrue,bg=caseColor)
-                genderTrueLabel.config(text=genderTrue, bg=genderColor)
-                pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
-                currentGuesses += 1
-                if(genderColor==caseColor and caseColor == pluralColor and pluralColor == declensionColor and declensionColor == "green"):
-                    currentGuesses = 0
-                    checkWordButton.pack_forget()
-                if(currentGuesses >= guessLimit):
-                    currentGuesses = 0
-                    checkWordButton.pack_forget()
-
+                
             # Create a frame to hold widgets
             wordframe = tk.Frame(master.canvas)
             wordframe.pack()
@@ -815,15 +788,11 @@ class GuessPart(Window):
             choices = tk.Frame(master.canvas, bg="")
             choices.pack()
 
-            for i in range(3):
-                tk.Button(choices, text = "obunga"+str(i), background = "light blue",fg="black").grid(column=0, row=i)
-            for i in range(3,6):
-                tk.Button(choices, text = "obunga"+str(i), background = "light blue",fg="black").grid(column=1, row=(i-3))
 
                 
 
             genWord = tk.Button(self.master.canvas, text="Generate New Word", padx=10, pady=5, fg="white", bg="dark blue", command=getLatinWord)
-            genWord.pack()
+            genWord.pack(anchor="s")
 
        
 
