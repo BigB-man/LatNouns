@@ -7,10 +7,10 @@
     "sing": 7,
     "plur": 7,
     "gender": 7,
-    "weight":{
-        "Fem":7,
-        "Masc":7,
-        "Neut":7
+    "weight": {
+        "Fem": 7,
+        "Masc": 7,
+        "Neut": 7
     },
     "Masc": {},
     "Neut": {},

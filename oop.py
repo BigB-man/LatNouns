@@ -38,6 +38,7 @@ class Window(tk.Frame):
                 key=1
                 while key<6:
                     filename = 'json/NounDeclension'+str(key)+'.json'
+                    filenameP = 'json/PartTester/NounDeclension'+str(key)+'.json'
                     filenameO = 'json/base/NounDeclension'+str(key)+'.json'
                     with open(filenameO, 'r',encoding='utf-8') as k:
                         dataOrigin = json.load(k)
@@ -45,13 +46,21 @@ class Window(tk.Frame):
                     os.remove(filename)
                     with open(filename, 'w', encoding='utf-8') as f:
                         json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
+                    os.remove(filenameP)
+                    with open(filenameP, 'w', encoding='utf-8') as f:
+                        json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
                 filename = 'json/NounDeclensions.json'
+                filenameP = 'json/PartTester/NounDeclensions.json'
+
                 filenameO = 'json/base/NounDeclensions.json'
                 with open(filenameO, 'r',encoding='utf-8') as k:
                     dataOrigin = json.load(k)
                 key+=1
                 os.remove(filename)
                 with open(filename, 'w', encoding='utf-8') as f:
+                    json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
+                os.remove(filenameP)
+                with open(filenameP, 'w', encoding='utf-8') as f:
                     json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
             def UploadAction():
                 try:
@@ -717,14 +726,13 @@ class GuessPart(Window):
                 for l in range(len(cases)):
                     for m in range(data[cases[l]]):
                         caseNoun.append(cases[l])
-                ranChosenCase =random.choice(caseNoun)
+                
 
                 plurality =[]
                 
                 for n in range(2):
                     for o in range(data[pluralOptions[n]]):
                         plurality.append(pluralOptions[n])
-                ranChosenPlural =random.choice(plurality)
 
                 filename = 'json/NounDeclension'+str(ranChosenWord[2])+'.json'
                 with open(filename, 'r',encoding='utf-8') as k:
@@ -736,45 +744,58 @@ class GuessPart(Window):
                 # generatedWord = tk.Text(wordframe)
                 # generatedWord.pack()
                 
+                ranChosenCase =random.choice(caseNoun)
+                ranChosenPlural =random.choice(plurality)
+                ranChosenGender = ranChosenWord[1]
                 ranWord = data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural]
                 # print(key)
-                return [ranWord,ranChosenWord,ranChosenCase,ranChosenPlural]
+
+                return [ranWord,ranChosenWord,ranChosenCase,ranChosenPlural,ranChosenGender,ranChosenWord[2]]
                 
             def getLatinWord():
-                global word, chosenPlural, chosenCase, chosenWord
+                global word, chosenPlural, chosenCase, chosenGender, chosenWord, chosenKey
                 output = genLatinWord()
                 print(output)
                 word = output[0]
-                chosenWord = output[1]
+                chosenGender = output[4]
                 chosenCase = output[2]
                 chosenPlural = output[3]
+                chosenWord = output[1]
+                chosenKey = output[5]
                 for widget in wordframe.winfo_children():
                     widget.destroy()
-                generatedWord = tk.Label(wordframe, text=chosenWord[1]+", "+chosenCase+", "+chosenPlural, bg ="white")
+                generatedWord = tk.Label(wordframe, text=chosenGender+", "+chosenCase+", "+chosenPlural, bg ="white")
                 generatedWord.pack()
                 wordChoice = []
 
                 for i in range(6):
                     # wordChoice.append(word)
-                    wordChoice.append(genLatinWord()[0])
-                wordChoice[random.randrange(0, 6, 1)] = word
+                    wordChoice.append(genLatinWord())
+                wordChoice[random.randrange(0, 6, 1)] = output
                 print("answer:"+word)
 
 
                 for i in choices.grid_slaves():
                     i.grid_forget()
                 for i in range(3):
-                    tk.Button(choices, text = wordChoice[i], background = "light blue",fg="black", width= 20, command=partial(checkWord,wordChoice[i])).grid(column=0, row=i)
+                    tk.Button(choices, text = wordChoice[i][0], background = "light blue",fg="black", width= 20, command=partial(checkWord,wordChoice[i])).grid(column=0, row=i)
                 for i in range(3,6):
-                    tk.Button(choices, text = wordChoice[i], background = "light blue",fg="black", width=20, command=partial(checkWord,wordChoice[i])).grid(column=1, row=(i-3))
+                    tk.Button(choices, text = wordChoice[i][0], background = "light blue",fg="black", width=20, command=partial(checkWord,wordChoice[i])).grid(column=1, row=(i-3))
 
             def checkWord(selecWord):
                 print(word)
                 print(selecWord)
-                if(word == selecWord):
-                    print("true")
-                    decrementWeight()
-                else:
+                filename = 'json/NounDeclension'+str(selecWord[1][2])+'.json'
+                with open(filename, 'r',encoding='utf-8') as k:
+                        data = json.load(k)
+                try:
+                    if(selecWord[0]==data[chosenGender][selecWord[1][0]][chosenCase][chosenPlural]):
+                        print("true")
+                        decrementWeight()
+                    else:
+                        print("wrong")
+                        incrementWeight()
+                except:
                     print("wrong")
                     incrementWeight()
                 
