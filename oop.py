@@ -794,17 +794,17 @@ class GuessPart(Window):
                     if(selecWord[0]==data[chosenGender][selecWord[1][0]][chosenCase][chosenPlural]):
                         print("true")
                         decrementWeight()
-                        titleLabel = tk.Label(choices, text="Right",font=("Arial", 25))
+                        titleLabel = tk.Label(choices, text="✓", bg="green",fg="white", font=("Arial", 25))
                         titleLabel.grid()
                     else:
                         print("wrong")
                         incrementWeight()
-                        titleLabel = tk.Label(choices, text="Wrong",font=("Arial", 25))
+                        titleLabel = tk.Label(choices, text="❌",bg="red",fg="white",font=("Arial", 25))
                         titleLabel.grid()
                 except:
                     print("wrong")
                     incrementWeight()
-                    titleLabel = tk.Label(choices, text="Wrong",font=("Arial", 25))
+                    titleLabel = tk.Label(choices, text="❌",bg="red",fg="white",font=("Arial", 25))
                     titleLabel.grid()
                 
             # Create a frame to hold widgets
