@@ -12,8 +12,9 @@ class GuessNoun(Window):
         def __init__(self, master, **kwargs):
             super().__init__(master, **kwargs)
             genders=["Fem","Masc","Neut"]
+            
+            global currentGuesses, guessLimit
             guessLimit = 1
-            global currentGuesses
             currentGuesses = 0
             cases= ["nom","acc","gen","dat","abl"]
             pluralOptions = ["sing","plur"]
@@ -89,6 +90,8 @@ class GuessNoun(Window):
                 
                 
             def getLatinWord():
+                genWord.pack_forget()
+                checkWordButton.pack()
                 global chosenWord,chosenCase,chosenPlural, word
                 output=self.genLatinWord()
                 word = output[0]
@@ -112,52 +115,63 @@ class GuessNoun(Window):
                 filename = 'json/NounDeclension'+str(chosenWord[2])+'.json'
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
-                if(gender.get() != chosenWord[1]):
-                    print("wrong")
-                    incrementWeight()
-                elif(declension.get()!=str(chosenWord[2])):
-                    print("wrong")
-                    incrementWeight()
-                elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-                    print("true")
-                    decrementWeight()
-                else:
-                    print("wrong")
-                    incrementWeight()
-                print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
-                print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
-                global genderTrue, caseTrue,pluralTrue,declensionTrue, currentGuesses
-                genderTrue = "❌"
-                genderColor = "red"
-                caseTrue = "❌"
-                caseColor = "red"
-                pluralTrue = "❌"
-                pluralColor = "red"
-                declensionTrue = "❌"
-                declensionColor = "red"
-                if(gender.get() == chosenWord[1]):
-                    genderTrue = "✓"
-                    genderColor = "green"
-                if(declension.get()==str(chosenWord[2])):
-                    declensionTrue ="✓"
-                    declensionColor = "green"
-                if(data[chosenWord[1]][chosenWord[0]][case.get()][chosenPlural] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-                    caseTrue = "✓"
-                    caseColor = "green"
-                if(data[chosenWord[1]][chosenWord[0]][chosenCase][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-                    pluralTrue = "✓"
-                    pluralColor = "green"
-                declensionTrueLabel.config(text=declensionTrue,bg=declensionColor)
-                caseTrueLabel.config(text=caseTrue,bg=caseColor)
-                genderTrueLabel.config(text=genderTrue, bg=genderColor)
-                pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
-                currentGuesses += 1
-                if(genderColor==caseColor and caseColor == pluralColor and pluralColor == declensionColor and declensionColor == "green"):
-                    currentGuesses = 0
-                    checkWordButton.pack_forget()
-                if(currentGuesses >= guessLimit):
-                    currentGuesses = 0
-                    checkWordButton.pack_forget()
+                options = [gender.get(),declension.get(),case.get(),plural.get]
+                selected = True
+                for i in options:
+                    print(i)
+                    if i == "0":
+                        selected = False
+                print(selected)
+                if (selected == True):
+                    if(gender.get() != chosenWord[1]):
+                        print("wrong")
+                        incrementWeight()
+                    elif(declension.get()!=str(chosenWord[2])):
+                        print("wrong")
+                        incrementWeight()
+                    elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+                        print("true")
+                        decrementWeight()
+                    else:
+                        print("wrongeeee")
+                        incrementWeight()
+                    print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
+                    print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
+                    global genderTrue, caseTrue,pluralTrue,declensionTrue, currentGuesses
+                    genderTrue = "❌"
+                    genderColor = "red"
+                    caseTrue = "❌"
+                    caseColor = "red"
+                    pluralTrue = "❌"
+                    pluralColor = "red"
+                    declensionTrue = "❌"
+                    declensionColor = "red"
+                    if(gender.get() == chosenWord[1]):
+                        genderTrue = "✓"
+                        genderColor = "green"
+                    if(declension.get()==str(chosenWord[2])):
+                        declensionTrue ="✓"
+                        declensionColor = "green"
+                    if(data[chosenWord[1]][chosenWord[0]][case.get()][chosenPlural] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+                        caseTrue = "✓"
+                        caseColor = "green"
+                    if(data[chosenWord[1]][chosenWord[0]][chosenCase][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
+                        pluralTrue = "✓"
+                        pluralColor = "green"
+                    declensionTrueLabel.config(text=declensionTrue,bg=declensionColor)
+                    caseTrueLabel.config(text=caseTrue,bg=caseColor)
+                    genderTrueLabel.config(text=genderTrue, bg=genderColor)
+                    pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
+                    currentGuesses += 1
+                    print(guessLimit)
+                    if(genderColor==caseColor and caseColor == pluralColor and pluralColor == declensionColor and declensionColor == "green"):
+                        currentGuesses = 0
+                        checkWordButton.pack_forget()
+                        genWord.pack()
+                    if(currentGuesses >= guessLimit):
+                        currentGuesses = 0
+                        checkWordButton.pack_forget()
+                        genWord.pack()
 
             # Create a frame to hold widgets
             wordframe = tk.Frame(master.canvas)
@@ -177,7 +191,7 @@ class GuessNoun(Window):
             #Declension Choices
             DeclensionText = tk.Label(labels, text = "Declension:")
             DeclensionText.pack()
-            declension = tk.StringVar(self, "1")
+            declension = tk.StringVar(self, "0")
             declensionButtons = tk.Frame(choices, bg="")
             declensionButtons.pack()
             # Dictionary to create multiple buttons
@@ -203,7 +217,7 @@ class GuessNoun(Window):
             caseButtons.pack()
             caseText = tk.Label(labels, text = "Case:")
             caseText.pack()
-            case = tk.StringVar(self, "1")
+            case = tk.StringVar(self, "0")
             # Dictionary to create multiple buttons
             values = {"Nominative" : "nom",
                     "Accusative" : "acc",
@@ -226,7 +240,7 @@ class GuessNoun(Window):
             genderButtons.pack()
             GenderText = tk.Label(labels, text = "Gender:")
             GenderText.pack()
-            gender = tk.StringVar(self, "1")
+            gender = tk.StringVar(self, "0")
             
             # Dictionary to create multiple buttons
             values = {"Feminine" : "Fem",
@@ -246,7 +260,7 @@ class GuessNoun(Window):
             #Plural words
             PluralText = tk.Label(labels, text = "Plurality:")
             PluralText.pack()
-            plural = tk.StringVar(self, "1")
+            plural = tk.StringVar(self, "0")
             pluralButtons = tk.Frame(choices, bg="")
             pluralButtons.pack()
             # Dictionary to create multiple buttons
@@ -269,4 +283,4 @@ class GuessNoun(Window):
             genWord.pack()
 
             checkWordButton = tk.Button(self.master.canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
-            checkWordButton.pack()
+            

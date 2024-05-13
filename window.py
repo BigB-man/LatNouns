@@ -212,7 +212,6 @@ class Window(tk.Frame):
                                 background = "light blue",fg="black").grid(row=1, column=count)
                     count+=1
                 def submit():
-                    global guessLimit
                     guessLimit = guess.get()
                 submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="dark blue", command=submit)
                 submitButton.grid(row=1, column=4)
