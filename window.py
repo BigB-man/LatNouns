@@ -16,6 +16,7 @@ class Window(tk.Frame):
             tk.Frame.__init__(self, master, **kwargs)
 
             self.master = master
+            
             def resetWeightFunc():
                 key=1
                 while key<6:
@@ -253,12 +254,12 @@ class Window(tk.Frame):
                         print("goops")
 
             
+            
             def resize_image():
 
                 global bg_image, bg_image_id
                 window_width = self.master.winfo_width()
                 window_height = self.master.winfo_height()
-                print(window_height)
 
                 # Calculate the scaling factors for width and height
                 scale_width = window_width / bg_image_orig.width()
@@ -281,6 +282,72 @@ class Window(tk.Frame):
             # canvas.bind("<Configure>", resize_image)
             canvas.bind("<Configure>", resize_imag)
             setImage()
+        def genLatinWord(self):
+                genders=["Fem","Masc","Neut"]
+                guessLimit = 1
+                global currentGuesses
+                currentGuesses = 0
+                cases= ["nom","acc","gen","dat","abl"]
+                pluralOptions = ["sing","plur"]
+                # Get the directory of the current script
+                
+                #print(script_directory)
+
+
+                key=1
+                wordList=[]
+                wordCount = 0
+                
+                
+
+                fileDecs = 'json/NounDeclensions.json'
+                with open(fileDecs, 'r',encoding='utf-8') as k:
+                    dataDecs = json.load(k)
+
+                while key<6:
+                    filename = 'json/NounDeclension'+str(key)+'.json'
+                    with open(filename, 'r',encoding='utf-8') as k:
+                        data = json.load(k)
+                    for k in range(3):
+                        for i in data[genders[k]]:
+                            for j in range(data[genders[k]][i]["weight"]*dataDecs["Declension"+str(key)]*data["weight"][genders[k]]):
+                                wordList.append([])
+                                wordList[wordCount].append(i)
+                                wordList[wordCount].append(genders[k])
+                                wordList[wordCount].append(key)
+                                wordCount+=1
+                    key+=1
+                ranChosenWord=random.choice(wordList)
+                caseNoun =[]
+                cases= ["nom","acc","gen","dat","abl"]
+                for l in range(len(cases)):
+                    for m in range(data[cases[l]]):
+                        caseNoun.append(cases[l])
+                
+
+                plurality =[]
+                
+                for n in range(2):
+                    for o in range(data[pluralOptions[n]]):
+                        plurality.append(pluralOptions[n])
+
+                filename = 'json/NounDeclension'+str(ranChosenWord[2])+'.json'
+                with open(filename, 'r',encoding='utf-8') as k:
+                        data = json.load(k)
+
+                # print(data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural])
+                
+                # generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
+                # generatedWord = tk.Text(wordframe)
+                # generatedWord.pack()
+                
+                ranChosenCase =random.choice(caseNoun)
+                ranChosenPlural =random.choice(plurality)
+                ranChosenGender = ranChosenWord[1]
+                ranWord = data[ranChosenWord[1]][ranChosenWord[0]][ranChosenCase][ranChosenPlural]
+                # print(key)
+
+                return [ranWord,ranChosenWord,ranChosenCase,ranChosenPlural,ranChosenGender,ranChosenWord[2]]
            
 
 from GuessPart import GuessPart  

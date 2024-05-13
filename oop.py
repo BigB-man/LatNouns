@@ -31,7 +31,6 @@ class HomePage(Window):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         master.title("Home Page")
-        print(str(master.winfo_height())+"HHI")
         titleLabel = tk.Label(master.canvas, text="Welcome to the Latin Noun Tester",font=("Arial", 25))
         titleLabel.pack(anchor="center", expand=True)
 

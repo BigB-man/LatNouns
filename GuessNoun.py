@@ -87,72 +87,26 @@ class GuessNoun(Window):
                 with open(fileDecs, 'w', encoding='utf-8') as f:
                     json.dump(dataDecs, f, indent=4, ensure_ascii=False)    
                 
+                
             def getLatinWord():
-                # Get the directory of the current script
-                
-                #print(script_directory)
-
-
-                key=1
-                wordList=[]
-                wordCount = 0
-                
                 global chosenWord,chosenCase,chosenPlural, word
+                output=self.genLatinWord()
+                word = output[0]
+                chosenWord = output[1]
+                chosenCase = output[2]
+                chosenPlural = output[3]
 
-                fileDecs = 'json/NounDeclensions.json'
-                with open(fileDecs, 'r',encoding='utf-8') as k:
-                    dataDecs = json.load(k)
-
-                while key<6:
-                    filename = 'json/NounDeclension'+str(key)+'.json'
-                    with open(filename, 'r',encoding='utf-8') as k:
-                        data = json.load(k)
-                    for k in range(3):
-                        for i in data[genders[k]]:
-                            for j in range(data[genders[k]][i]["weight"]*dataDecs["Declension"+str(key)]*data["weight"][genders[k]]):
-                                wordList.append([])
-                                wordList[wordCount].append(i)
-                                wordList[wordCount].append(genders[k])
-                                wordList[wordCount].append(key)
-                                wordCount+=1
-                    key+=1
-                chosenWord=random.choice(wordList)
-                caseNoun =[]
-                cases= ["nom","acc","gen","dat","abl"]
-                for l in range(len(cases)):
-                    for m in range(data[cases[l]]):
-                        caseNoun.append(cases[l])
-                chosenCase =random.choice(caseNoun)
-
-                plurality =[]
-                
-                for n in range(2):
-                    for o in range(data[pluralOptions[n]]):
-                        plurality.append(pluralOptions[n])
-                chosenPlural =random.choice(plurality)
-
-                filename = 'json/NounDeclension'+str(chosenWord[2])+'.json'
-                with open(filename, 'r',encoding='utf-8') as k:
-                        data = json.load(k)
-
-                print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
-                
-                # generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="gray")
-                # generatedWord = tk.Text(wordframe)
-                # generatedWord.pack()
                 for widget in wordframe.winfo_children():
                     widget.destroy()
-                generatedWord = tk.Label(wordframe, text=data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural], bg ="white")
+                generatedWord = tk.Label(wordframe, text=word, bg ="white")
                 generatedWord.pack()
                 # print(wordList)
                 # print(chosenWord)
-                word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
                 declensionTrueLabel.config(text="",bg="white")
                 caseTrueLabel.config(text="",bg="white")
                 genderTrueLabel.config(text="", bg="white")
                 pluralTrueLabel.config(text="",bg="white")
                 checkWordButton.pack()
-                print(key)
 
             def checkWord():
                 filename = 'json/NounDeclension'+str(chosenWord[2])+'.json'
