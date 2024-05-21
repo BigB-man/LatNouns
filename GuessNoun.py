@@ -13,8 +13,9 @@ class GuessNoun(Window):
             super().__init__(master, **kwargs)
             genders=["Fem","Masc","Neut"]
             
-            global currentGuesses, guessLimit
-            guessLimit = 1
+            global currentGuesses
+            
+            
             currentGuesses = 0
             cases= ["nom","acc","gen","dat","abl"]
             pluralOptions = ["sing","plur"]
@@ -163,12 +164,12 @@ class GuessNoun(Window):
                     genderTrueLabel.config(text=genderTrue, bg=genderColor)
                     pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
                     currentGuesses += 1
-                    print(guessLimit)
+                    print("Limit"+str(self.guessLimit))
                     if(genderColor==caseColor and caseColor == pluralColor and pluralColor == declensionColor and declensionColor == "green"):
                         currentGuesses = 0
                         checkWordButton.pack_forget()
                         genWord.pack()
-                    if(currentGuesses >= guessLimit):
+                    if(currentGuesses >= self.guessLimit):
                         currentGuesses = 0
                         checkWordButton.pack_forget()
                         genWord.pack()
@@ -283,4 +284,5 @@ class GuessNoun(Window):
             genWord.pack()
 
             checkWordButton = tk.Button(self.master.canvas, text="Check Word", padx=10, pady=5, fg="white", bg="dark blue", command=checkWord)
+        
             

@@ -14,7 +14,8 @@ class Window(tk.Frame):
         def __init__(self, master=None, **kwargs):
 
             tk.Frame.__init__(self, master, **kwargs)
-
+            guessLimit = 1
+            self.guessLimit = guessLimit
             self.master = master
             
             def resetWeightFunc():
@@ -212,7 +213,8 @@ class Window(tk.Frame):
                                 background = "light blue",fg="black").grid(row=1, column=count)
                     count+=1
                 def submit():
-                    guessLimit = guess.get()
+                    self.guessLimit = guess.get()
+                    
                 submitButton = tk.Button(LimitFrame, text="Submit", fg="white", bg="dark blue", command=submit)
                 submitButton.grid(row=1, column=4)
             

@@ -1,1 +1,2 @@
 python3 LatinNounTester.py
+read
