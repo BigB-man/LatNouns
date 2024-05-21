@@ -12,7 +12,6 @@ class GuessPart(Window):
     def __init__(self, master, **kwargs):
             super().__init__(master, **kwargs)
             genders=["Fem","Masc","Neut"]
-            guessLimit = 1
             global currentGuesses
             currentGuesses = 0
             cases= ["nom","acc","gen","dat","abl"]
@@ -91,7 +90,7 @@ class GuessPart(Window):
                 
             def getLatinWord():
                 global word, chosenPlural, chosenCase, chosenGender, chosenWord, chosenKey
-                output = self.genLatinWord()
+                output = self.genLatinWord("json/PartTester/")
                 print(output)
                 word = output[0]
                 chosenGender = output[4]
@@ -107,7 +106,7 @@ class GuessPart(Window):
 
                 for i in range(6):
                     # wordChoice.append(word)
-                    wordChoice.append(self.genLatinWord())
+                    wordChoice.append(self.genLatinWord("json/og/"))
                 wordChoice[random.randrange(0, 6, 1)] = output
                 print("answer:"+word)
 
@@ -120,6 +119,9 @@ class GuessPart(Window):
                     tk.Button(choices, text = wordChoice[i][0], background = "light blue",fg="black", width=20, command=partial(checkWord,wordChoice[i])).grid(column=1, row=(i-3))
                 genWord.pack_forget()
 
+            def nuuh():
+                print("you've already chosen")
+
             def checkWord(selecWord):
                 genWord.pack()
                 print(word)
@@ -128,23 +130,27 @@ class GuessPart(Window):
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
                 for i in choices.grid_slaves():
-                    i.grid_forget()
+                    i.configure(command=nuuh)
+                    if (i.cget('text')==selecWord[0]):
+                        
+                        i.configure(bg="grey")
+                    
                 try:
                     if(selecWord[0]==data[chosenGender][selecWord[1][0]][chosenCase][chosenPlural]):
                         print("true")
                         decrementWeight()
                         titleLabel = tk.Label(choices, text="✓", bg="green",fg="white", font=("Arial", 25))
-                        titleLabel.grid()
+                        titleLabel.grid(columnspan=2)
                     else:
                         print("wrong")
                         incrementWeight()
                         titleLabel = tk.Label(choices, text="❌",bg="red",fg="white",font=("Arial", 25))
-                        titleLabel.grid()
+                        titleLabel.grid(columnspan=2)
                 except:
                     print("wrong")
                     incrementWeight()
                     titleLabel = tk.Label(choices, text="❌",bg="red",fg="white",font=("Arial", 25))
-                    titleLabel.grid()
+                    titleLabel.grid(columnspan=2)
             
                 
                 

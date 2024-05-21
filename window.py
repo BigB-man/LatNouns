@@ -283,7 +283,7 @@ class Window(tk.Frame):
             # canvas.bind("<Configure>", resize_image)
             canvas.bind("<Configure>", resize_imag)
             setImage()
-        def genLatinWord(self):
+        def genLatinWord(self,path):
                 genders=["Fem","Masc","Neut"]
                 guessLimit = 1
                 global currentGuesses
@@ -301,12 +301,12 @@ class Window(tk.Frame):
                 
                 
 
-                fileDecs = 'json/NounDeclensions.json'
+                fileDecs = path+'NounDeclensions.json'
                 with open(fileDecs, 'r',encoding='utf-8') as k:
                     dataDecs = json.load(k)
 
                 while key<6:
-                    filename = 'json/NounDeclension'+str(key)+'.json'
+                    filename = path+'NounDeclension'+str(key)+'.json'
                     with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
                     for k in range(3):
@@ -332,7 +332,7 @@ class Window(tk.Frame):
                     for o in range(data[pluralOptions[n]]):
                         plurality.append(pluralOptions[n])
 
-                filename = 'json/NounDeclension'+str(ranChosenWord[2])+'.json'
+                filename = path+'NounDeclension'+str(ranChosenWord[2])+'.json'
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
 

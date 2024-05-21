@@ -94,7 +94,7 @@ class GuessNoun(Window):
                 genWord.pack_forget()
                 checkWordButton.pack()
                 global chosenWord,chosenCase,chosenPlural, word
-                output=self.genLatinWord()
+                output=self.genLatinWord("json/")
                 word = output[0]
                 chosenWord = output[1]
                 chosenCase = output[2]
