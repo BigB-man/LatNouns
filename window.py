@@ -14,9 +14,12 @@ class Window(tk.Frame):
         def __init__(self, master=None, **kwargs):
 
             tk.Frame.__init__(self, master, **kwargs)
+            
             guessLimit = 1
             self.guessLimit = guessLimit
             self.master = master
+            cases= ["nom","acc","gen","dat","abl"]
+            pluralOptions = ["sing","plur"]
             
             def resetWeightFunc():
                 key=1
@@ -349,6 +352,60 @@ class Window(tk.Frame):
                 # print(key)
 
                 return [ranWord,ranChosenWord,ranChosenCase,ranChosenPlural,ranChosenGender,ranChosenWord[2]]
+        def crement(self,path,mode,chosenWord,chosenCase,chosenPlural):
+            cases= ["nom","acc","gen","dat","abl"]
+            pluralOptions = ["sing","plur"]
+            filename = path+'NounDeclension'+str(chosenWord[2])+'.json' 
+            with open(filename, 'r',encoding='utf-8') as k:
+                data = json.load(k)
+            
+            word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
+            if(mode == 0):#decrement
+                if(data[chosenWord[1]][chosenWord[0]]["weight"] > 1):
+                    data[chosenWord[1]][chosenWord[0]]["weight"] -=1
+                if(data["weight"][chosenWord[1]] > 1):
+                    data["weight"][chosenWord[1]] -= 1
+            if(mode == 1):#increment
+                if(data[chosenWord[1]][chosenWord[0]]["weight"] < 50):
+                    data[chosenWord[1]][chosenWord[0]]["weight"] +=1
+                if(data["weight"][chosenWord[1]] < 50):
+                    data["weight"][chosenWord[1]] += 1
+            
+            val = set()
+            
+            for i in cases:
+                for j in pluralOptions:
+                    if(data[chosenWord[1]][chosenWord[0]][i][j] == word):
+                        val.add(i)
+                        val.add(j) 
+            for k in val:
+                if(mode==0):#decrement
+                    if(data[k] > 1):
+                        data[k] -=1
+                if(mode ==1):#increment
+                    if(data[k] < 50):
+                        data[k] +=1
+                
+            print(val)
+            os.remove(filename)
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
+            
+            
+            fileDecs = path+'NounDeclensions.json'
+            with open(fileDecs, 'r',encoding='utf-8') as k:
+                dataDecs = json.load(k)
+            
+            if(mode==0):#decrement
+                if(dataDecs["Declension"+str(chosenWord[2])] > 1):
+                    dataDecs["Declension"+str(chosenWord[2])] -= 1
+            if(mode==1):#increment
+                if(dataDecs["Declension"+str(chosenWord[2])] < 50):
+                    dataDecs["Declension"+str(chosenWord[2])] += 1
+            
+            os.remove(fileDecs)
+            with open(fileDecs, 'w', encoding='utf-8') as f:
+                json.dump(dataDecs, f, indent=4, ensure_ascii=False)
            
 
 from GuessPart import GuessPart  
