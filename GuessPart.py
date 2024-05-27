@@ -11,12 +11,11 @@ from window import Window
 class GuessPart(Window):
     def __init__(self, master, **kwargs):
             super().__init__(master, **kwargs)
-            genders=["Fem","Masc","Neut"]
+
             global currentGuesses
             currentGuesses = 0
-            cases= ["nom","acc","gen","dat","abl"]
-            pluralOptions = ["sing","plur"]
-            master.title("Latin Noun Tester")
+
+            
 
             def decrementWeight():#remember to add edit to declension weight
                 self.crement("json/PartTester/",0,chosenWord,chosenCase,chosenPlural)  
@@ -38,7 +37,7 @@ class GuessPart(Window):
                 chosenKey = output[5]
                 for widget in wordframe.winfo_children():
                     widget.destroy()
-                generatedWord = tk.Label(wordframe, text=chosenGender+", "+chosenCase+", "+chosenPlural, bg ="white")
+                generatedWord = tk.Label(wordframe, text=chosenGender+", "+chosenCase+", "+chosenPlural, bg ="white", fg="black")
                 generatedWord.pack()
                 wordChoice = []
 
@@ -95,7 +94,7 @@ class GuessPart(Window):
             # Create a frame to hold widgets
             wordframe = tk.Frame(master.canvas)
             wordframe.pack()
-            generatedWord = tk.Label(wordframe, text="Word", bg ="white")
+            generatedWord = tk.Label(wordframe, text="Word", bg ="white", fg="black")
             generatedWord.pack()
             # Create a frame to hold widgets
 

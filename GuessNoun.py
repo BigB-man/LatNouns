@@ -11,15 +11,13 @@ from window import Window
 class GuessNoun(Window):
         def __init__(self, master, **kwargs):
             super().__init__(master, **kwargs)
-            genders=["Fem","Masc","Neut"]
             
             global currentGuesses
             
             
             currentGuesses = 0
-            cases= ["nom","acc","gen","dat","abl"]
-            pluralOptions = ["sing","plur"]
-            master.title("Latin Noun Tester")
+
+            
 
             def decrementWeight():#remember to add edit to declension weight
                 self.crement("json/",0,chosenWord,chosenCase,chosenPlural)  
@@ -115,7 +113,7 @@ class GuessNoun(Window):
             # Create a frame to hold widgets
             wordframe = tk.Frame(master.canvas)
             wordframe.pack()
-            generatedWord = tk.Label(wordframe, text="Word", bg ="white")
+            generatedWord = tk.Label(wordframe, text="Word", bg ="white", fg="black")
             generatedWord.pack()
             # Create a frame to hold widgets
             buttons = tk.Frame(master.canvas)
@@ -168,9 +166,7 @@ class GuessNoun(Window):
             # rather than creating each button separately
             count=1
             for (text, value) in values.items():
-                tk.Radiobutton(caseButtons, text = text, variable = case, 
-                            value = value, indicator = 0,
-                            background = "light blue",fg="black").grid(row=1, column=count)
+                tk.Radiobutton(caseButtons, text = text, variable = case, value = value, indicator = 0,background = "light blue",fg="black").grid(row=1, column=count)
                 count+=1
             caseTrueLabel = tk.Label(results,text="",bg="white", width=2)
             caseTrueLabel.pack()
