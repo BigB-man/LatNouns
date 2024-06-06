@@ -28,7 +28,7 @@ class GuessPart(Window):
             def getLatinWord():
                 global word, chosenPlural, chosenCase, chosenGender, chosenWord, chosenKey
                 output = self.genLatinWord("json/PartTester/")
-                print(output)
+                # #print(output)
                 word = output[0]
                 chosenGender = output[4]
                 chosenCase = output[2]
@@ -45,7 +45,7 @@ class GuessPart(Window):
                     # wordChoice.append(word)
                     wordChoice.append(self.genLatinWord("json/og/"))
                 wordChoice[random.randrange(0, 6, 1)] = output
-                print("answer:"+word)
+                # #print("answer:"+word)
 
 
                 for i in choices.grid_slaves():
@@ -61,8 +61,8 @@ class GuessPart(Window):
 
             def checkWord(selecWord):
                 genWord.pack()
-                print(word)
-                print(selecWord)
+                # #print(word)
+                # #print(selecWord)
                 filename = 'json/NounDeclension'+str(selecWord[1][2])+'.json'
                 with open(filename, 'r',encoding='utf-8') as k:
                         data = json.load(k)
@@ -74,17 +74,17 @@ class GuessPart(Window):
                     
                 try:
                     if(selecWord[0]==data[chosenGender][selecWord[1][0]][chosenCase][chosenPlural]):
-                        print("true")
+                        #print("true")
                         decrementWeight()
                         titleLabel = tk.Label(choices, text="✓", bg="green",fg="white", font=("Arial", 25))
                         titleLabel.grid(columnspan=2)
                     else:
-                        print("wrong")
+                        #print("wrong")
                         incrementWeight()
                         titleLabel = tk.Label(choices, text="❌",bg="red",fg="white",font=("Arial", 25))
                         titleLabel.grid(columnspan=2)
                 except:
-                    print("wrong")
+                    #print("wrong")
                     incrementWeight()
                     titleLabel = tk.Label(choices, text="❌",bg="red",fg="white",font=("Arial", 25))
                     titleLabel.grid(columnspan=2)

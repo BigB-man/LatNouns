@@ -40,8 +40,8 @@ class GuessNoun(Window):
                     widget.destroy()
                 generatedWord = tk.Label(wordframe, text=word, bg ="white")
                 generatedWord.pack()
-                # print(wordList)
-                # print(chosenWord)
+                # #print(wordList)
+                # #print(chosenWord)
                 declensionTrueLabel.config(text="",bg="white")
                 caseTrueLabel.config(text="",bg="white")
                 genderTrueLabel.config(text="", bg="white")
@@ -55,25 +55,25 @@ class GuessNoun(Window):
                 options = [gender.get(),declension.get(),case.get(),plural.get]
                 selected = True
                 for i in options:
-                    print(i)
+                    #print(i)
                     if i == "0":
                         selected = False
-                print(selected)
+                #print(selected)
                 if (selected == True):
                     if(gender.get() != chosenWord[1]):
-                        print("wrong")
+                        #print("wrong")
                         incrementWeight()
                     elif(declension.get()!=str(chosenWord[2])):
-                        print("wrong")
+                        #print("wrong")
                         incrementWeight()
                     elif(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()] == data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]):
-                        print("true")
+                        #print("true")
                         decrementWeight()
                     else:
-                        print("wrongeeee")
+                        #print("wrongeeee")
                         incrementWeight()
-                    print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
-                    print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
+                    #print(data[chosenWord[1]][chosenWord[0]][case.get()][plural.get()])
+                    #print(data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural])
                     global genderTrue, caseTrue,pluralTrue,declensionTrue, currentGuesses
                     genderTrue = "❌"
                     genderColor = "red"
@@ -100,7 +100,7 @@ class GuessNoun(Window):
                     genderTrueLabel.config(text=genderTrue, bg=genderColor)
                     pluralTrueLabel.config(text=pluralTrue,bg=pluralColor)
                     currentGuesses += 1
-                    print("Limit"+str(self.guessLimit))
+                    #print("Limit"+str(self.guessLimit))
                     if(genderColor==caseColor and caseColor == pluralColor and pluralColor == declensionColor and declensionColor == "green"):
                         currentGuesses = 0
                         checkWordButton.pack_forget()

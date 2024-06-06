@@ -1,7 +1,6 @@
 import tkinter as tk
 from window import Window
 
-initImage = True
 
 class MainApp(tk.Tk):
 
