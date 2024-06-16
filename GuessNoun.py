@@ -136,7 +136,7 @@ class GuessNoun(Window):
                     "Second" : "2",
                     "Third" : "3",
                     "Fourth" : "4",
-                    "Fith" : "5"}
+                    "Fifth" : "5"}
             
             # Loop is used to create multiple Radiobuttons
             # rather than creating each button separately
@@ -158,7 +158,7 @@ class GuessNoun(Window):
             # Dictionary to create multiple buttons
             values = {"Nominative" : "nom",
                     "Accusative" : "acc",
-                    "Genative" : "gen",
+                    "Genitive" : "gen",
                     "Dative" : "dat",
                     "Ablative" : "abl"}
             
@@ -193,7 +193,7 @@ class GuessNoun(Window):
             genderTrueLabel = tk.Label(results,text="",bg="white", width=2)
             genderTrueLabel.pack()
             #Plural words
-            PluralText = tk.Label(labels, text = "Plurality:")
+            PluralText = tk.Label(labels, text = "Number:")
             PluralText.pack()
             plural = tk.StringVar(self, "0")
             pluralButtons = tk.Frame(choices, bg="")
