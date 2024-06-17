@@ -1,0 +1,6 @@
+Windows:
+Just run the exe file
+
+Mac:
+1.Download python through running the pkg file or download the latest release in the python website https://www.python.org/downloads/macos/
+2.run the "MacApp.sh" file
