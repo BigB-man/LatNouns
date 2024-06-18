@@ -38,7 +38,7 @@ class GuessNoun(Window):
 
                 for widget in wordframe.winfo_children():
                     widget.destroy()
-                generatedWord = tk.Label(wordframe, text=word, bg ="white")
+                generatedWord = tk.Label(wordframe, text=word, bg ="white",fg="black")
                 generatedWord.pack()
                 # #print(wordList)
                 # #print(chosenWord)
