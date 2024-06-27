@@ -54,15 +54,14 @@ class Window(tk.Frame):
                     os.remove(filenameP)
                     with open(filenameP, 'w', encoding='utf-8') as f:
                         json.dump(dataOrigin, f, indent=4, ensure_ascii=False)
-                def UploadAction():
+                def UploadAction(): #function to upload a png background
                     try:
                         filename = filedialog.askopenfilename(filetypes=[('image files', '.png')])
                         print('Selected:', filename)
                         file = filename[filename.rindex("/")+1:]
-                        print(os.getcwd())
                         shutil.copyfile(filename, 'backgrounds/'+file)
                     except:
-                        print("Upload errored this is the current directory:"+os.getcwd)
+                        print("Upload error")
                 
                 def SetBackground():
                     SetBackgroundWin = tk.Toplevel(self)
@@ -235,24 +234,24 @@ class Window(tk.Frame):
             self.master.canvas = canvas
 
             
-            def setImage():#sets the background of the 
+            def setImage():#sets the background of the page
                 global bg_image_orig, bg_image,bg_image_id, initImage
                 fileDecs = 'json/Background.json'
                 with open(fileDecs, 'r',encoding='utf-8') as k:
                     data = json.load(k)
-                if(data["background"] ==""):
-                    print("hie")
+
+                try:    
+                    bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
+                    bg_image = bg_image_orig
+                    if(initImage == False):
+                        canvas.delete(bg_image_id)
+                    if(initImage == True):
+                        initImage = False
+                    bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center",tag='img')
+                    resize_image()
+                except:
+                    print("Error Loading Background")
                     canvas.delete("img")
-                else:    
-                        bg_image_orig = tk.PhotoImage(file="backgrounds/"+data["background"])
-                        bg_image = bg_image_orig
-                        if(initImage == False):
-                            canvas.delete(bg_image_id)
-                        if(initImage == True):
-                            initImage = False
-                        bg_image_id = canvas.create_image(0, 0, image=bg_image, anchor="center",tag='img')
-                        resize_image()
-                        print("goops")
 
             
             
@@ -348,33 +347,32 @@ class Window(tk.Frame):
                 data = json.load(k)
             
             word = data[chosenWord[1]][chosenWord[0]][chosenCase][chosenPlural]
-            if(mode == 0):#decrement
+            if(mode == 0):#decrement the noun & gender weight
                 if(data[chosenWord[1]][chosenWord[0]]["weight"] > 1):
                     data[chosenWord[1]][chosenWord[0]]["weight"] -=1
                 if(data["weight"][chosenWord[1]] > 1):
                     data["weight"][chosenWord[1]] -= 1
-            if(mode == 1):#increment
+            if(mode == 1):#increment the noun & gender weight
                 if(data[chosenWord[1]][chosenWord[0]]["weight"] < 50):
                     data[chosenWord[1]][chosenWord[0]]["weight"] +=1
                 if(data["weight"][chosenWord[1]] < 50):
                     data["weight"][chosenWord[1]] += 1
             
-            val = set()
+            attriubutes = set()#stores the attributes of the word without any duplicates
             
-            for i in cases:
+            for i in cases:#adding each attribute found in the word to the set
                 for j in pluralOptions:
                     if(data[chosenWord[1]][chosenWord[0]][i][j] == word):
-                        val.add(i)
-                        val.add(j) 
-            for k in val:
-                if(mode==0):#decrement
+                        attriubutes.add(i)
+                        attriubutes.add(j) 
+            for k in attriubutes:
+                if(mode==0):#decrement the attribute weight
                     if(data[k] > 1):
                         data[k] -=1
-                if(mode ==1):#increment
+                if(mode ==1):#increment the attribute weight
                     if(data[k] < 50):
                         data[k] +=1
                 
-            print(val)
             os.remove(filename)
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
@@ -384,10 +382,10 @@ class Window(tk.Frame):
             with open(fileDecs, 'r',encoding='utf-8') as k:
                 dataDecs = json.load(k)
             
-            if(mode==0):#decrement
+            if(mode==0):#decrement the declension weighting
                 if(dataDecs["Declension"+str(chosenWord[2])] > 1):
                     dataDecs["Declension"+str(chosenWord[2])] -= 1
-            if(mode==1):#increment
+            if(mode==1):#increment the declension weighting
                 if(dataDecs["Declension"+str(chosenWord[2])] < 50):
                     dataDecs["Declension"+str(chosenWord[2])] += 1
             
@@ -396,5 +394,5 @@ class Window(tk.Frame):
                 json.dump(dataDecs, f, indent=4, ensure_ascii=False)
            
 
-from GuessPart import GuessPart  
-from GuessNoun import GuessNoun
+from pythonFiles.GuessPart import GuessPart  
+from pythonFiles.GuessNoun import GuessNoun

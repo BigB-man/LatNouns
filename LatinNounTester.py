@@ -1,5 +1,5 @@
 import tkinter as tk
-from window import Window
+from pythonFiles.window import Window
 
 
 class MainApp(tk.Tk):

@@ -6,7 +6,7 @@ import os
 import random
 import shutil
 from functools import partial
-from window import Window
+from pythonFiles.window import Window
 
 class GuessPart(Window):
     def __init__(self, master, **kwargs):
